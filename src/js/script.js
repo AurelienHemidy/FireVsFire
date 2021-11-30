@@ -25,7 +25,7 @@ const scene = new THREE.Scene()
 
 //Lights
 
-const ambientLight = new THREE.AmbientLight("#ffffff", 3);
+const ambientLight = new THREE.AmbientLight("#ffffff", 10);
 scene.add(ambientLight)
 
 /**
@@ -35,17 +35,29 @@ const cube = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
-const cylinder = new THREE.Mesh(
-    new THREE.CylinderGeometry( 1, 1, .1, 6 ),
-    new THREE.MeshBasicMaterial({ color: '#ffff00' })
-)
-scene.add(cylinder)
 
-const numberOfGridCell = 100;
+const numberOfGridCell = 25;
 
-for(let i = 0; i < numberOfGridCell; i++) {
+const cellsSize = 0.5;
+
+for(let j = 0; j < numberOfGridCell; j++) {
+    let offsetX = j % 2 === 1 ? cellsSize : 0;
+
+    for(let i = 0; i < numberOfGridCell; i++) {
+        const cylinder = new THREE.Mesh(
+            new THREE.CylinderGeometry( cellsSize, cellsSize, .1, 6 ),
+            new THREE.MeshBasicMaterial({ color: '#293133' })
+        );
     
+        cylinder.position.x = i * (cellsSize * 2) + offsetX;
+        cylinder.position.z = j * (cellsSize * 1.75);
+    
+        scene.add(cylinder);
+    }
 }
+
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 
 //Construction of the Hex Grid
 
