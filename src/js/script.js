@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // import * as dat from 'lil-gui'
 
 /**
@@ -22,14 +23,31 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+//Lights
+
+const ambientLight = new THREE.AmbientLight("#ffffff", 3);
+scene.add(ambientLight)
+
 /**
- * Test cube
+ * Test cylinder
  */
 const cube = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
-scene.add(cube)
+const cylinder = new THREE.Mesh(
+    new THREE.CylinderGeometry( 1, 1, .1, 6 ),
+    new THREE.MeshBasicMaterial({ color: '#ffff00' })
+)
+scene.add(cylinder)
+
+const numberOfGridCell = 100;
+
+for(let i = 0; i < numberOfGridCell; i++) {
+    
+}
+
+//Construction of the Hex Grid
 
 /**
  * Sizes
@@ -71,6 +89,8 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+const controls = new OrbitControls( camera, renderer.domElement );
+
 /**
  * Animate
  */
@@ -82,6 +102,8 @@ const tick = () =>
 
     // Render
     renderer.render(scene, camera)
+
+    controls.update();
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
