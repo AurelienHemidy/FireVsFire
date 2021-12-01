@@ -9,7 +9,6 @@ import { InterleavedBuffer, Vector2 } from 'three';
 import Game from "../gameManager/gameManager";
 
 import Land from "./land";
-import {Vector2} from "three"; 
 
 /**
  * Debug
@@ -23,9 +22,6 @@ const parameters = {
 
 const textureLoader = new THREE.TextureLoader(); 
 
-const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
-    console.log(texture)
-})
 
 gui.add(parameters, 'needleAngle', 0, 360).onChange((e) => {
     // document.querySelector(".wind-needle").style.transform = `translate(-50%, -50%) rotate(${e}deg)`;
@@ -84,7 +80,6 @@ const cellsSize = 0.5;
 let lands = [];
 let landMeshes = [];
 let selectedLand = null;
-for(let j = 0; j < numberOfGridCell; j++) {
 
 const textureArray = [];
 
