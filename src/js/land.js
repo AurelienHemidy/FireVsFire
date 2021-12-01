@@ -1,14 +1,14 @@
 export default class Land {
-    constructor(mesh, axes, type, status, landUpLeft, landUpRight, landLeft, landRight, landDownLeft, landDownRight) {
+    constructor(mesh, coord, type, status, landUpLeftCoord, landUpRightCoord, landLeftCoord, landRightCoord, landDownLeftCoord, landDownRightCoord) {
         this.mesh = mesh;
-        this.axes = axes;
+        this.coord = coord;
         this.type = type;
         this.status = status;
-        this.landUpLeft = landUpLeft;
-        this.landUpRight = landUpRight;
-        this.landLeft = landLeft;
-        this.landRight = landRight;
-        this.landDownLeft = landDownLeft;
-        this.landDownRight = landDownRight;
+        this.landUpLeftCoord = landUpLeftCoord;
+        this.landUpRightCoord = landUpRightCoord;
+        this.landLeftCoord = landLeftCoord;
+        this.landRightCoord = landRightCoord;
+        this.landDownLeftCoord = landDownLeftCoord;
+        this.landDownRightCoord = landDownRightCoord;
     }
 }

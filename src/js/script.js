@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Land from "./land";
 import {Vector2} from "three";
-// import * as dat from 'lil-gui'
+import * as dat from 'lil-gui'
 
 /**
  * Debug
@@ -26,13 +26,12 @@ const windRoseAngles = {
 const textureLoader = new THREE.TextureLoader();
 
 const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
-    console.log(texture)
+    // console.log(texture)
 })
 
 gui.add(parameters, 'needleAngle', 0, 360).onChange((e) => {
     document.querySelector(".wind-needle").style.transform = `translate(-50%, -50%) rotate(${e}deg)`;
 })
-
 
 
 /**
@@ -60,15 +59,17 @@ const cube = new THREE.Mesh(
 
 //Construction of the Hex Grid
 
-const numberOfGridCellOnOneLine = 25;
+const numberOfGridCellOnOneLine = 15;
 
 const cellsSize = 0.5;
 let lands = [];
 let landMeshes = [];
-for(let j = 0; j < numberOfGridCell; j++) {
+let selectedLand = null;
+
+for (let j = 0; j < numberOfGridCellOnOneLine; j++) {
     let offsetX = j % 2 === 1 ? cellsSize : 0;
 
-    for(let i = 0; i < numberOfGridCell; i++) {
+    for (let i = 0; i < numberOfGridCellOnOneLine; i++) {
         const cylinder = new THREE.Mesh(
             new THREE.CylinderGeometry(cellsSize, cellsSize, .1, 6),
             new THREE.MeshBasicMaterial({color: '#293133'})
@@ -79,15 +80,15 @@ for(let j = 0; j < numberOfGridCell; j++) {
 
         let land = new Land(
             cylinder,
-            new Vector2(i,j),
+            new Vector2(i, j),
             'tree',
             5,
-            new Vector2(i,j-1),
-            new Vector2(i+1,j-1),
-            new Vector2(i-1,j),
-            new Vector2(i+1,j),
-            new Vector2(i,j+1),
-            new Vector2(i+1,j+1),)
+            new Vector2(i, j - 1),
+            new Vector2(i + 1, j - 1),
+            new Vector2(i - 1, j),
+            new Vector2(i + 1, j),
+            new Vector2(i, j + 1),
+            new Vector2(i + 1, j + 1),)
 
         // add land object to land object list
         lands.push(land)
@@ -99,9 +100,6 @@ for(let j = 0; j < numberOfGridCell; j++) {
     }
 }
 
-const getGridCellsNeighbours = () => {
-
-}
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
@@ -133,7 +131,6 @@ const setIntervalWindRose = setInterval(() => {
 }, windRoseTime);
 
 
-
 /**
  * Sizes
  */
@@ -161,7 +158,7 @@ window.addEventListener('resize', () => {
  */
 const raycaster = new THREE.Raycaster()
 let currentIntersect = null
-const rayOrigin = new THREE.Vector3(- 3, 0, 0)
+const rayOrigin = new THREE.Vector3(-3, 0, 0)
 const rayDirection = new THREE.Vector3(10, 0, 0)
 rayDirection.normalize()
 
@@ -170,21 +167,95 @@ rayDirection.normalize()
  */
 const mouse = new THREE.Vector2()
 
-window.addEventListener('mousemove', (event) =>
-{
+window.addEventListener('mousemove', (event) => {
     mouse.x = event.clientX / sizes.width * 2 - 1
-    mouse.y = - (event.clientY / sizes.height) * 2 + 1
+    mouse.y = -(event.clientY / sizes.height) * 2 + 1
 })
+
+
+//get land from uuid
+const getLandByUUID = (uuid) => {
+    let resLand
+    lands.map(land => {
+        if (uuid === land.mesh.uuid) {
+            resLand = land
+        }
+    })
+    return resLand
+}
+
+//get land from Lands list by coord
+const getLandFromLandsByCoord = (coord) => {
+    let resLand
+    lands.forEach(land => {
+        if (coord.x === land.coord.x && coord.y === land.coord.y ) {
+            resLand = land
+            return land
+        }
+    })
+    return resLand
+}
+
+//get all land's neighbour
+const getLandNeighbours = (land) => {
+    let neighbours = {}
+    neighbours.upRight = getLandFromLandsByCoord(land.landUpRightCoord)
+    neighbours.right = getLandFromLandsByCoord(land.landRightCoord)
+    neighbours.downRight = getLandFromLandsByCoord(land.landDownRightCoord)
+    neighbours.downLeft = getLandFromLandsByCoord(land.landDownLeftCoord)
+    neighbours.left = getLandFromLandsByCoord(land.landLeftCoord)
+    neighbours.upLeft = getLandFromLandsByCoord(land.landUpLeftCoord)
+    console.log(neighbours)
+    return neighbours
+}
+
+//get land's neighbour from by CurrentWindDirection
+const getLandNeighbourByCurrentWindDirection = (land) => {
+    let neighbours, resLand
+    neighbours = getLandNeighbours(land)
+    if (land) {
+        switch (currentWindDirection) {
+            case 45:
+                resLand = neighbours.upRight
+                break
+            case 90:
+                resLand = neighbours.right
+                break
+            case 135:
+                resLand = neighbours.downRight
+                break
+            case 225:
+                resLand = neighbours.downLeft
+                break
+            case 270:
+                resLand = neighbours.left
+                break
+            case 315:
+                resLand = neighbours.upLeft
+                break
+            default:
+                break
+        }
+    }
+    return resLand
+}
+
+const clickOnLand = () => {
+    let neighbour
+    if (currentIntersect) {
+        selectedLand = getLandByUUID(currentIntersect.object.uuid)
+        selectedLand.mesh.material.color.setHex(0xff0000)
+        neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
+        neighbour.mesh.material.color.setHex(0x5900ff)
+        // console.log('neighbour')
+        // console.log(neighbour)
+    }
+    neighbour = null
+}
 
 // Once click on object, get the object
-window.addEventListener('click', () =>
-{
+window.addEventListener('click', clickOnLand)
 
-    if(currentIntersect)
-    {
-        console.log(currentIntersect.object)
-    }
-})
 
 /**
  * Camera
@@ -223,24 +294,7 @@ const tick = () => {
 
     const intersects = raycaster.intersectObjects(landMeshes)
 
-    if(intersects.length)
-    {
-        if(!currentIntersect)
-        {
-            console.log('mouse enter')
-        }
-
-        currentIntersect = intersects[0]
-    }
-    else
-    {
-        if(currentIntersect)
-        {
-            console.log('mouse leave')
-        }
-
-        currentIntersect = null
-    }
+    intersects.length ? currentIntersect = intersects[0] : currentIntersect = null
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
