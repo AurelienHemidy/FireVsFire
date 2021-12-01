@@ -1,10 +1,10 @@
 import * as THREE from 'three'
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from 'lil-gui'
 import gsap from 'gsap';
 
 import { SETTINGS } from "../settings/settings";
-import { InterleavedBuffer, Vector2 } from 'three';
+import { Vector2 } from 'three';
 
 import Game from "../gameManager/gameManager";
 
@@ -22,15 +22,9 @@ const parameters = {
 
 const textureLoader = new THREE.TextureLoader(); 
 
-
-gui.add(parameters, 'needleAngle', 0, 360).onChange((e) => {
-    // document.querySelector(".wind-needle").style.transform = `translate(-50%, -50%) rotate(${e}deg)`;
-    console.log(SETTINGS.tuileTypes.sapins.whenBurnt())
-})
-
 const game = new Game();
 
-game.startGame();
+// game.startGame();
 
 
 
@@ -81,29 +75,17 @@ let lands = [];
 let landMeshes = [];
 let selectedLand = null;
 
-const textureArray = [];
-
 const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
-    // texture.wrapS = 1002;
-    // texture.wrapT = 1000;
-
-    // cylinder.material.map = texture;
-    console.log(texture);
-})
-const textureTest2 = textureLoader.load("/feu_500.png", (texture) => {
-    // texture.wrapS = 1002;
-    // texture.wrapT = 1000;
-
-    // texture.flipY = false
-    // texture.wrapS = THREE.RepeatWrapping;
-    // texture.repeat.x = - 1;
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.NearestFilter
-
-    // cylinder.material.map = texture;
-    console.log(texture);
+})
+const textureTest2 = textureLoader.load("/feu_500.png", (texture) => {
+    texture.center = new Vector2(0.5, 0.5);
+    texture.rotation = 1.5708
+    texture.magFilter = THREE.NearestFilter
+    texture.minFilter = THREE.NearestFilter
 })
 
 for(let j = 0; j < numberOfGridCellOnOneLine; j++) {
@@ -139,11 +121,6 @@ for(let j = 0; j < numberOfGridCellOnOneLine; j++) {
         scene.add(cylinder);
     }
 }
-
-
-// setTimeout(() => {
-//     gsap.to(scene.getObjectById(13).rotation, {duration: .5, z: 6.28319, ease:"cubic-bezier(.24,.63,.12,1)"});
-// }, 5000);
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
@@ -306,10 +283,9 @@ window.addEventListener('click', clickOnLand)
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 6
-// camera.position.y = 4
-// camera.rotation.x = -1.5708 / 1.2
-// camera.position.x = 1
+// camera.position.z = 6
+camera.position.set(4.55, 14.88, 4.26);
+camera.rotation.set(-1.545, 0, 0);
 
 gui.add(camera.position, 'z', -10, 10)
 scene.add(camera)
@@ -323,7 +299,9 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-const controls = new OrbitControls(camera, renderer.domElement);
+
+//ORBIT CONTROLS
+// const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
  * Animate
@@ -336,7 +314,7 @@ const tick = () => {
     // Render
     renderer.render(scene, camera)
 
-    controls.update();
+    // controls.update();
 
     // Cast a ray from the mouse and handle events
     raycaster.setFromCamera(mouse, camera)
