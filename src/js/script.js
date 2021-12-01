@@ -21,16 +21,6 @@ const parameters = {
 }
 
 const textureLoader = new THREE.TextureLoader();
-
-const game = new Game();
-
-// game.startGame();
-
-
-gui.add(game, "startGame");
-gui.add(game, "pauseGame");
-gui.add(game, "resetGame");
-
 /**
  * Base
  */
@@ -96,10 +86,10 @@ for (let j = 0; j < numberOfGridCellOnOneLine; j++) {
             new THREE.MeshBasicMaterial({color: '#ffffff', map: textureTest2})
         );
 
-        cylinder.position.x = i * (cellsSize * 2) + offsetX;
-        cylinder.position.z = j * (cellsSize * 1.75);
+        cylinder.position.x = i * (cellsSize * 1.9) + offsetX;
+        cylinder.position.z = j * (cellsSize * 1.65);
 
-        let x = j % 2 === 1 ? 2 * i + 1 : 2 * i
+        let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
 
         let land = new Land(
             cylinder,
@@ -123,8 +113,13 @@ for (let j = 0; j < numberOfGridCellOnOneLine; j++) {
     }
 }
 
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+const game = new Game(lands);
+
+gui.add(game, "startGame");
+gui.add(game, "pauseGame");
+gui.add(game, "resetGame");
+
+
 
 //Rose des Vents
 
@@ -132,7 +127,8 @@ let windRoseTime = 500;
 let currentWindDirection = 0;
 
 const getWindRoseTime = () => {
-    const newNumber = 2 + Math.random() * 5;
+    const newNumber = 2 + Math.random() * 3;
+    // const newNumber = 5;
 
     windRoseTime = newNumber;
 }
@@ -149,8 +145,9 @@ const setIntervalWindRose = setInterval(() => {
 
     windRose.style.transform = `translate(-50%, -50%) rotate(${currentWindDirection}deg)`;
 
-    getWindRoseTime();
-}, windRoseTime);
+    // getWindRoseTime();
+    // console.log(windRoseTime)
+}, 4000);
 
 
 /**
@@ -265,13 +262,15 @@ const clickOnLand = () => {
     let neighbour
     if (currentIntersect) {
         selectedLand = getLandByUUID(currentIntersect.object.uuid)
+        game.setCurrentLand(selectedLand);
         selectedLand.mesh.material.color.setHex(0xff0000)
-        console.log('selectedLand')
-        console.log(selectedLand)
+        // console.log('selectedLand')
+        // console.log(selectedLand)
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
+        game.setCurrentLandNeighbours(getLandNeighbours(selectedLand));
         neighbour.mesh.material.color.setHex(0x5900ff)
-        console.log('neighbour')
-        console.log(neighbour)
+        // console.log('neighbour')
+        // console.log(neighbour)
     }
     neighbour = null
 }
