@@ -3,8 +3,8 @@ import * as THREE from 'three'
 import * as dat from 'lil-gui'
 import gsap from 'gsap';
 
-import { SETTINGS } from "../settings/settings";
-import { Vector2 } from 'three';
+import {SETTINGS} from "../settings/settings";
+import {Vector2} from 'three';
 
 import Game from "../gameManager/gameManager";
 
@@ -20,12 +20,11 @@ const parameters = {
     needleAngle: 0
 }
 
-const textureLoader = new THREE.TextureLoader(); 
+const textureLoader = new THREE.TextureLoader();
 
 const game = new Game();
 
 // game.startGame();
-
 
 
 gui.add(game, "startGame");
@@ -44,7 +43,7 @@ const scene = new THREE.Scene()
 
 const rotateZ = {
     rotate() {
-        gsap.to(scene.getObjectById(13).rotation, {duration: .5, z: 6.28319, ease:"cubic-bezier(.24,.63,.12,1)"})
+        gsap.to(scene.getObjectById(13).rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
         setTimeout(() => {
             scene.getObjectById(13).rotation.z = 0;
         }, 0.7);
@@ -88,29 +87,31 @@ const textureTest2 = textureLoader.load("/feu_500.png", (texture) => {
     texture.minFilter = THREE.NearestFilter
 })
 
-for(let j = 0; j < numberOfGridCellOnOneLine; j++) {
+for (let j = 0; j < numberOfGridCellOnOneLine; j++) {
     let offsetX = j % 2 === 1 ? cellsSize : 0;
 
-    for(let i = 0; i < numberOfGridCellOnOneLine; i++) {
+    for (let i = 0; i < numberOfGridCellOnOneLine; i++) {
         const cylinder = new THREE.Mesh(
-            new THREE.CylinderGeometry( cellsSize, cellsSize, .05, 6 ),
-            new THREE.MeshBasicMaterial({ color: '#ffffff', map: textureTest2 })
+            new THREE.CylinderGeometry(cellsSize, cellsSize, .05, 6),
+            new THREE.MeshBasicMaterial({color: '#ffffff', map: textureTest2})
         );
 
         cylinder.position.x = i * (cellsSize * 2) + offsetX;
         cylinder.position.z = j * (cellsSize * 1.75);
 
+        let x = j % 2 === 1 ? 2 * i + 1 : 2 * i
+
         let land = new Land(
             cylinder,
-            new Vector2(i, j),
+            new Vector2(x, j),
             'tree',
             5,
-            new Vector2(i, j - 1),
-            new Vector2(i + 1, j - 1),
-            new Vector2(i - 1, j),
-            new Vector2(i + 1, j),
-            new Vector2(i, j + 1),
-            new Vector2(i + 1, j + 1),)
+            new Vector2(x - 1, j - 1),
+            new Vector2(x + 1, j - 1),
+            new Vector2(x - 2, j),
+            new Vector2(x + 2, j),
+            new Vector2(x - 1, j + 1),
+            new Vector2(x + 1, j + 1),)
 
         // add land object to land object list
         lands.push(land)
@@ -209,7 +210,7 @@ const getLandByUUID = (uuid) => {
 const getLandFromLandsByCoord = (coord) => {
     let resLand
     lands.forEach(land => {
-        if (coord.x === land.coord.x && coord.y === land.coord.y ) {
+        if (coord.x === land.coord.x && coord.y === land.coord.y) {
             resLand = land
             return land
         }
@@ -226,7 +227,6 @@ const getLandNeighbours = (land) => {
     neighbours.downLeft = getLandFromLandsByCoord(land.landDownLeftCoord)
     neighbours.left = getLandFromLandsByCoord(land.landLeftCoord)
     neighbours.upLeft = getLandFromLandsByCoord(land.landUpLeftCoord)
-    console.log(neighbours)
     return neighbours
 }
 
@@ -266,10 +266,12 @@ const clickOnLand = () => {
     if (currentIntersect) {
         selectedLand = getLandByUUID(currentIntersect.object.uuid)
         selectedLand.mesh.material.color.setHex(0xff0000)
+        console.log('selectedLand')
+        console.log(selectedLand)
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
         neighbour.mesh.material.color.setHex(0x5900ff)
-        // console.log('neighbour')
-        // console.log(neighbour)
+        console.log('neighbour')
+        console.log(neighbour)
     }
     neighbour = null
 }
