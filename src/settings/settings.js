@@ -17,7 +17,8 @@ export const SETTINGS = {
         sapins: {
             canBurn: true,
             proportionOnTheMapAtStart: 26,
-            whenBurnt: () => getSapinsBurnt()
+            whenBurnt: () => getSapinsBurnt(),
+            whenGrow: () => getSeedGrow()
         },
         deadLeaf: {
             canBurn: true,
@@ -104,5 +105,15 @@ const getFieldBurnt = () => {
         return 'jeunes pousses';
     } else {
         return 'champs pavots';
+    }
+}
+
+const getSeedGrow = () => {
+    //Get the potential Result of a growing seed
+    const randomNumber = Math.round(Math.random() * 3);
+    if(randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
+        return 'sapins';
+    } else {
+        return 'sequoias';
     }
 }

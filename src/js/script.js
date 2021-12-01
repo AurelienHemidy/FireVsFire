@@ -147,7 +147,7 @@ const setIntervalWindRose = setInterval(() => {
 
     // getWindRoseTime();
     // console.log(windRoseTime)
-}, 4000);
+}, 3000);
 
 
 /**
