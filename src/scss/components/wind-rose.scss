@@ -1,0 +1,44 @@
+.wind-rose {
+    position: absolute;
+
+    height: 100px;
+    width: 100px;
+
+    bottom: 20px;
+    left: 20px;
+
+    background-color:rgb(186, 194, 182);
+
+    border-radius: 100%;
+
+    .wind-needle {
+        width: 5px;
+        height: 60px;
+
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%) rotate(0deg);
+
+        transform-origin: 50%;
+
+        transition: 1s transform cubic-bezier(.24,.63,.12,1);
+
+        background-color: rebeccapurple;
+
+        .wind-pointer {
+            position: absolute;
+
+            width: 10px;
+            height: 15px;
+
+            background-color: rgb(130, 231, 201);
+
+            transform: translateX(-2.5px);
+
+            left: 0;
+        }
+    }
+}

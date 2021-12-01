@@ -1,18 +1,38 @@
 import * as THREE from 'three'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-// import * as dat from 'lil-gui'
+import * as dat from 'lil-gui'
 
 /**
  * Debug
  */
-// const gui = new dat.GUI()
+const gui = new dat.GUI()
 
 const parameters = {
-    materialColor: '#ffeded'
+    materialColor: '#ffeded',
+    needleAngle: 0
 }
+
+const windRoseAngles = {
+    0: 45,
+    1: 90,
+    2: 135,
+    3: 225,
+    4: 270,
+    5: 315
+}
+
+const textureLoader = new THREE.TextureLoader();
+
+// const textureTest1 = textureLoader.load("");
 
 // gui
 //     .addColor(parameters, 'materialColor')
+
+gui.add(parameters, 'needleAngle', 0, 360).onChange((e) => {
+    document.querySelector(".wind-needle").style.transform = `translate(-50%, -50%) rotate(${e}deg)`;
+})
+
+
 
 /**
  * Base
@@ -36,14 +56,16 @@ const cube = new THREE.Mesh(
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
 )
 
-const numberOfGridCell = 25;
+//Construction of the Hex Grid
+
+const numberOfGridCellOnOneLine = 25;
 
 const cellsSize = 0.5;
 
-for(let j = 0; j < numberOfGridCell; j++) {
+for(let j = 0; j < numberOfGridCellOnOneLine; j++) {
     let offsetX = j % 2 === 1 ? cellsSize : 0;
 
-    for(let i = 0; i < numberOfGridCell; i++) {
+    for(let i = 0; i < numberOfGridCellOnOneLine; i++) {
         const cylinder = new THREE.Mesh(
             new THREE.CylinderGeometry( cellsSize, cellsSize, .1, 6 ),
             new THREE.MeshBasicMaterial({ color: '#293133' })
@@ -56,10 +78,40 @@ for(let j = 0; j < numberOfGridCell; j++) {
     }
 }
 
+const getGridCellsNeighbours = () => {
+
+}
+
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 
-//Construction of the Hex Grid
+//Rose des Vents
+
+let windRoseTime = 500;
+let currentWindDirection = 0;
+
+const getWindRoseTime = () => {
+    const newNumber = 1.5 + Math.random() * 4;
+    
+    windRoseTime = newNumber;
+}
+
+const getRandomNumberBetweenZeroAndFive = () => {
+    const newNumber = Math.round(Math.random() * 5);
+
+    return newNumber;
+} 
+
+const setIntervalWindRose = setInterval(() => {
+    const windRose = document.querySelector(".wind-needle");
+    currentWindDirection = windRoseAngles[getRandomNumberBetweenZeroAndFive()];
+
+    windRose.style.transform = `translate(-50%, -50%) rotate(${currentWindDirection}deg)`;
+
+    getWindRoseTime();
+}, windRoseTime);
+
+
 
 /**
  * Sizes
