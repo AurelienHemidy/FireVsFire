@@ -23,7 +23,8 @@ module.exports = {
   entry: './src/app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/script.min.js'
+    filename: 'js/script.min.js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -59,7 +60,8 @@ module.exports = {
         {
           from: "src/fonts/",
           to: "fonts/"
-        }
+        },
+        { from: path.resolve(__dirname, 'static') }
       ]
     })
   ].concat(htmlPlugins),
