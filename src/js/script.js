@@ -1,6 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from 'lil-gui'
+import gsap from 'gsap';
+
+import { SETTINGS } from "../settings/settings";
+import { InterleavedBuffer, Vector2 } from 'three';
+
+import Game from "../gameManager/gameManager";
 
 /**
  * Debug
@@ -12,25 +18,22 @@ const parameters = {
     needleAngle: 0
 }
 
-const windRoseAngles = {
-    0: 45,
-    1: 90,
-    2: 135,
-    3: 225,
-    4: 270,
-    5: 315
-}
-
-const textureLoader = new THREE.TextureLoader();
-
-const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
-    console.log(texture)
-})  
+const textureLoader = new THREE.TextureLoader(); 
 
 gui.add(parameters, 'needleAngle', 0, 360).onChange((e) => {
-    document.querySelector(".wind-needle").style.transform = `translate(-50%, -50%) rotate(${e}deg)`;
+    // document.querySelector(".wind-needle").style.transform = `translate(-50%, -50%) rotate(${e}deg)`;
+    console.log(SETTINGS.tuileTypes.sapins.whenBurnt())
 })
 
+const game = new Game();
+
+game.startGame();
+
+
+
+gui.add(game, "startGame");
+gui.add(game, "pauseGame");
+gui.add(game, "resetGame");
 
 
 /**
@@ -41,6 +44,17 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+const rotateZ = {
+    rotate() {
+        gsap.to(scene.getObjectById(13).rotation, {duration: .5, z: 6.28319, ease:"cubic-bezier(.24,.63,.12,1)"})
+        setTimeout(() => {
+            scene.getObjectById(13).rotation.z = 0;
+        }, 0.7);
+    } 
+}
+
+gui.add(rotateZ, "rotate");
 
 //Lights
 
@@ -57,19 +71,44 @@ const cube = new THREE.Mesh(
 
 //Construction of the Hex Grid
 
-const numberOfGridCellOnOneLine = 25;
+const numberOfGridCellOnOneLine = 10;
 
 const cellsSize = 0.5;
+
+const textureArray = [];
+
+const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
+    // texture.wrapS = 1002;
+    // texture.wrapT = 1000;
+
+    // cylinder.material.map = texture;
+    console.log(texture);
+})
+const textureTest2 = textureLoader.load("/feu_500.png", (texture) => {
+    // texture.wrapS = 1002;
+    // texture.wrapT = 1000;
+
+    // texture.flipY = false
+    // texture.wrapS = THREE.RepeatWrapping;
+    // texture.repeat.x = - 1;
+    texture.center = new Vector2(0.5, 0.5);
+    texture.rotation = 1.5708
+    texture.magFilter = THREE.NearestFilter
+    texture.minFilter = THREE.NearestFilter
+
+    // cylinder.material.map = texture;
+    console.log(texture);
+})
 
 for(let j = 0; j < numberOfGridCellOnOneLine; j++) {
     let offsetX = j % 2 === 1 ? cellsSize : 0;
 
-    for(let i = 0; i < numberOfGridCellOnOneLine; i++) {
+    for(let i = 0; i < numberOfGridCellOnOneLine; i++) { 
         const cylinder = new THREE.Mesh(
-            new THREE.CylinderGeometry( cellsSize, cellsSize, .1, 6 ),
-            new THREE.MeshBasicMaterial({ color: '#293133' })
+            new THREE.CylinderGeometry( cellsSize, cellsSize, .05, 6 ),
+            new THREE.MeshBasicMaterial({ color: '#ffffff', map: textureTest2 })
         );
-    
+
         cylinder.position.x = i * (cellsSize * 2) + offsetX;
         cylinder.position.z = j * (cellsSize * 1.75);
     
@@ -81,6 +120,10 @@ const getGridCellsNeighbours = () => {
 
 }
 
+// setTimeout(() => {
+//     gsap.to(scene.getObjectById(13).rotation, {duration: .5, z: 6.28319, ease:"cubic-bezier(.24,.63,.12,1)"});
+// }, 5000);
+
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 
@@ -90,7 +133,7 @@ let windRoseTime = 500;
 let currentWindDirection = 0;
 
 const getWindRoseTime = () => {
-    const newNumber = 1.5 + Math.random() * 4;
+    const newNumber = 2 + Math.random() * 5;
     
     windRoseTime = newNumber;
 }
@@ -103,7 +146,7 @@ const getRandomNumberBetweenZeroAndFive = () => {
 
 const setIntervalWindRose = setInterval(() => {
     const windRose = document.querySelector(".wind-needle");
-    currentWindDirection = windRoseAngles[getRandomNumberBetweenZeroAndFive()];
+    currentWindDirection = SETTINGS.windRoseAngles[getRandomNumberBetweenZeroAndFive()];
 
     windRose.style.transform = `translate(-50%, -50%) rotate(${currentWindDirection}deg)`;
 
@@ -141,6 +184,11 @@ window.addEventListener('resize', () =>
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 6
+// camera.position.y = 4
+// camera.rotation.x = -1.5708 / 1.2
+// camera.position.x = 1
+
+gui.add(camera.position, 'z', -10, 10)
 scene.add(camera)
 
 /**
