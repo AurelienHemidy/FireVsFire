@@ -310,6 +310,7 @@ const clickOnLand = () => {
         if(selectedLand.type.name === "river" || selectedLand.type.name === "factory" || selectedLand.isBurnt === true)
             return
         // game.setCurrentLand(selectedLand);
+        SETTINGS.tuileTypes[selectedLand.type.name].sound.play()
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
         game.setCurrentLandNeighbourNeighbours(getLandNeighbours(neighbour));
         // console.log("click neighbour", getLandNeighbourByCurrentWindDirection(selectedLand))
