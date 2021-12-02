@@ -9,6 +9,7 @@ import {Vector2} from 'three';
 import Game from "../gameManager/gameManager";
 
 import Land from "./land";
+import { tuileTypesList } from './entities/entities';
 
 /**
  * Debug
@@ -64,6 +65,10 @@ let lands = [];
 let landMeshes = [];
 let selectedLand = null;
 
+setTimeout(() => {
+    console.log(tuileTypesList)
+}, 2000);
+
 const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708
@@ -86,10 +91,12 @@ for (let j = 0; j < numberOfGridCellOnOneLine; j++) {
             new THREE.MeshBasicMaterial({color: '#ffffff', map: textureTest2})
         );
 
-        cylinder.position.x = i * (cellsSize * 1.9) + offsetX;
-        cylinder.position.z = j * (cellsSize * 1.65);
+        cylinder.position.x = i * (cellsSize * 2) + offsetX;
+        cylinder.position.z = j * (cellsSize * 1.75);
 
         let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
+
+        const newRandomNumber = Math.random() * (numberOfGridCellOnOneLine^2);
 
         let land = new Land(
             cylinder,

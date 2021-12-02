@@ -83,12 +83,12 @@ class Game {
 
             } else if(this.currentLand.type === "deadLeaf") {
                 const nextTypeOfTile = SETTINGS.tuileTypes.deadLeaf.whenBurnt();
-                this.setNewTypeOfTile(nextTypeOfTile);
+                // this.setNewTypeOfTile(nextTypeOfTile);
 
                 if(nextTypeOfTile === "jeunes pousses") {
-                    const nextTypeOfTileIfNoSequoiaNearby = SETTINGS.tuileTypes.sapins.whenGrow();
+                    const nextTypeOfTile = SETTINGS.tuileTypes.sapins.whenGrow();
                     setTimeout(() => {
-                        this.setNewTypeOfTile(nextTypeOfTileIfNoSequoiaNearby);
+                        this.setNewTypeOfTile(nextTypeOfTile);
                     }, 10000);
                 }
 
@@ -102,9 +102,9 @@ class Game {
                 const nextTypeOfTile = SETTINGS.tuileTypes.field.whenBurnt();
 
                 if(nextTypeOfTile === "jeunes pousses") {
-                    const nextTypeOfTileIfNoSequoiaNearby = SETTINGS.tuileTypes.sapins.whenGrow();
+                    const nextTypeOfTile= SETTINGS.tuileTypes.sapins.whenGrow();
                     setTimeout(() => {
-                        this.setNewTypeOfTile(nextTypeOfTileIfNoSequoiaNearby);
+                        this.setNewTypeOfTile(nextTypeOfTile);
                     }, 10000);
                 }
             }
