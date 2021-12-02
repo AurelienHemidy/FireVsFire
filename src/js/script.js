@@ -66,26 +66,13 @@ let lands = [];
 let landMeshes = [];
 let selectedLand = null;
 
-// setTimeout(() => {
-//     const randomNumber = Math.round(Math.random() * 4);
-//     const randomType = tuileTypesList[randomNumber];
-//     const tuileType = SETTINGS.tuileTypes[tuileTypesList[randomNumber].name];
-//     if(tuileType.proportionOnTheMapAtStart >= tuileType.counter) {
-//         tuileType.counter++;
-//         console.log(tuileType.counter)
-//     } else {
-//         console.log('lets do it again');
-//     }
-//     // console.log(randomType)
-// }, 2000);
-
 const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708;
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.NearestFilter
 })
-const textureTest2 = textureLoader.load("/animaux.png", (texture) => {
+const fireTexture = textureLoader.load("/feu.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708;
     texture.magFilter = THREE.NearestFilter
@@ -304,17 +291,27 @@ const clickOnLand = () => {
     let neighbour
     if (currentIntersect) {
         selectedLand = getLandByUUID(currentIntersect.object.uuid)
-        game.setCurrentLand(selectedLand);
-        selectedLand.mesh.material.color.setHex(0xff0000)
+        if(selectedLand.type.name === "river" || selectedLand.type.name === "factory")
+            return
+        // game.setCurrentLand(selectedLand);
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
+        game.setCurrentLandNeighbourNeighbours(getLandNeighbours(neighbour));
+        // console.log("click neighbour", getLandNeighbourByCurrentWindDirection(selectedLand))
+        game.setCurrentLand(selectedLand, fireTexture);
+        game.setCurrentLandNeighbour(neighbour, fireTexture);
+        // console.log(neighbour)
+        
+        // selectedLand.mesh.material.color.setHex(0xff0000)
+        
         game.setCurrentLandNeighbours(getLandNeighbours(selectedLand));
-        neighbour.mesh.material.color.setHex(0x5900ff)
+        
+        // neighbour.mesh.material.color.setHex(0x5900ff)
         // console.log('neighbour')
         // console.log(neighbour)
     }
     neighbour = null
-    console.log('selectedLand')
-    console.log(selectedLand.coord)
+    // console.log('selectedLand')
+    // console.log(selectedLand.coord)
 }
 
 // Once click on object, get the object

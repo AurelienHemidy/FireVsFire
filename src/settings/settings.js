@@ -99,24 +99,28 @@ export const SETTINGS = {
 const getSapinsBurnt = () => {
     //Get the potential Result of a burnt Sapin
     const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
-        return 'jeunes pousses';
-    } else {
+    if (randomNumber === 0) {
+        return 'champs'
+    } else if(randomNumber === 1) {
         return 'animaux';
+    } else {
+        return 'jeunes pousses';
     }
 }
 const getDeadLeafBurnt = () => {
     //Get the potential Result of a burnt Sapin
     const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
+    if (randomNumber === 0) {
+        return 'jeunes pousses'
+    } else if(randomNumber === 1) {
         return 'animaux';
     } else {
-        return 'jeunes pousses';
+        return 'champs';
     }
 }
 
 const getSequiosBurnt = () => {
-    return "champs pavots";
+    return "champs";
 }
 
 const getFieldBurnt = () => {
@@ -125,7 +129,7 @@ const getFieldBurnt = () => {
     if (randomNumber === 0 || randomNumber === 1) {
         return 'jeunes pousses';
     } else {
-        return 'champs pavots';
+        return 'champs';
     }
 }
 

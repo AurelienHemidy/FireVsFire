@@ -52,6 +52,30 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[5].texture = texture;
     });
+    const seedTexture = textureLoader.load("/jeune_pousse.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        nextEntities.seed.texture = texture;
+    });
+    const fieldTexture = textureLoader.load("/champs.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        nextEntities.field.texture = texture;
+    });
+    const usineTexture = textureLoader.load("/usine.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        nextEntities.factory.texture = texture;
+    });
 
 
 }
@@ -114,3 +138,33 @@ export const tuileTypesList = [
         texture: ""
     }
 ]
+
+export const nextEntities = {
+    seed: {
+        name: "jeunes pousses",
+        sounds: {
+            0: "",
+            1: "",
+            2: ""
+        },
+        texture: ""
+    },
+    field: {
+        name: "champs",
+        sounds: {
+            0: "",
+            1: "",
+            2: ""
+        },
+        texture: ""
+    },
+    factory: {
+        name: "usine",
+        sounds: {
+            0: "",
+            1: "",
+            2: ""
+        },
+        texture: ""
+    }
+}
