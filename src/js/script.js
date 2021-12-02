@@ -116,21 +116,21 @@ const getRandomLand = () => {
 setTimeout(() => {
     for (let j = 0; j < 8; j++) {
         let offsetX = j % 2 === 1 ? cellsSize : 0;
-    
+
         for (let i = 0; i < 15; i++) {
             const randomNumber = Math.round(Math.random() * 4);
             const cylinder = new THREE.Mesh(
                 new THREE.CylinderGeometry(cellsSize, cellsSize, .01, 6),
                 new THREE.MeshBasicMaterial({color: '#ffffff', map: tuileTypesList[randomNumber].texture})
             );
-    
+
             cylinder.position.x = i * (cellsSize * 2) + offsetX;
             cylinder.position.z = j * (cellsSize * 1.75);
-    
+
             let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
-            
+
             // const randomLand = getRandomLand();
-        
+
             let land = new Land(
                 cylinder,
                 new Vector2(x, j),
@@ -142,13 +142,13 @@ setTimeout(() => {
                 new Vector2(x + 2, j),
                 new Vector2(x - 1, j + 1),
                 new Vector2(x + 1, j + 1),)
-    
+
             // add land object to land object list
             lands.push(land)
-    
+
             // add land mesh to land mesh list
             landMeshes.push(cylinder)
-    
+
             scene.add(cylinder);
         }
     }
@@ -306,8 +306,6 @@ const clickOnLand = () => {
         selectedLand = getLandByUUID(currentIntersect.object.uuid)
         game.setCurrentLand(selectedLand);
         selectedLand.mesh.material.color.setHex(0xff0000)
-        // console.log('selectedLand')
-        // console.log(selectedLand)
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
         game.setCurrentLandNeighbours(getLandNeighbours(selectedLand));
         neighbour.mesh.material.color.setHex(0x5900ff)
@@ -315,6 +313,8 @@ const clickOnLand = () => {
         // console.log(neighbour)
     }
     neighbour = null
+    console.log('selectedLand')
+    console.log(selectedLand.coord)
 }
 
 // Once click on object, get the object

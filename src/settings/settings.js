@@ -1,3 +1,5 @@
+import {Vector2} from "three";
+
 export const SETTINGS = {
     gameSettings: {
         durationOfAGame: 180000,
@@ -69,14 +71,24 @@ export const SETTINGS = {
         }
     },
 
+    riverMapAtStart: [
+        new Vector2(6, 0), new Vector2(24, 0),
+        new Vector2(5, 1), new Vector2(25, 1),
+        new Vector2(6, 2),
+        new Vector2(7, 3),
+        new Vector2(6, 4),new Vector2(8, 4), new Vector2(20, 4),
+        new Vector2(19, 5),new Vector2(21, 5),
+        new Vector2(20, 6),
+        new Vector2(19, 7),
+    ],
 
     jokers: {
         canadair: {
             quantity: 3,
             useCanadair() {
-                if(this.quantity < 1)
+                if (this.quantity < 1)
                     return console.log("There's no canadair anymore")
-                
+
                 this.quantity--;
                 console.log(this.quantity);
             }
@@ -87,7 +99,7 @@ export const SETTINGS = {
 const getSapinsBurnt = () => {
     //Get the potential Result of a burnt Sapin
     const randomNumber = Math.round(Math.random() * 3);
-    if(randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
+    if (randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
         return 'jeunes pousses';
     } else {
         return 'animaux';
@@ -96,7 +108,7 @@ const getSapinsBurnt = () => {
 const getDeadLeafBurnt = () => {
     //Get the potential Result of a burnt Sapin
     const randomNumber = Math.round(Math.random() * 3);
-    if(randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
+    if (randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
         return 'animaux';
     } else {
         return 'jeunes pousses';
@@ -110,7 +122,7 @@ const getSequiosBurnt = () => {
 const getFieldBurnt = () => {
     //Get the potential Result of a burnt Sapin
     const randomNumber = Math.round(Math.random() * 3);
-    if(randomNumber === 0 || randomNumber === 1) {
+    if (randomNumber === 0 || randomNumber === 1) {
         return 'jeunes pousses';
     } else {
         return 'champs pavots';
@@ -120,7 +132,7 @@ const getFieldBurnt = () => {
 const getSeedGrow = () => {
     //Get the potential Result of a growing seed
     const randomNumber = Math.round(Math.random() * 3);
-    if(randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
+    if (randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
         return 'sapins';
     } else {
         return 'sequoias';
