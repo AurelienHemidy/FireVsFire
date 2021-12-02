@@ -3,7 +3,6 @@ import {Vector2} from 'three';
 
 const getAllTextures = () => {
     const textureLoader = new THREE.TextureLoader();
-
     const sapinsTexture = textureLoader.load("/sapin.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
@@ -82,61 +81,75 @@ const getAllTextures = () => {
 
 getAllTextures();
 
+const soundPath = '/sound/TUILES/'
 export const tuileTypesList = [
     {
         name: "sapins",
         sounds: {
-            0: "",
-            1: "",
-            2: ""
+            0: soundPath+'vegetal_01.mp3',
         },
         texture: ""
     },
     {
         name: "deadLeaf",
         sounds: {
-            0: "",
-            1: "",
-            2: ""
+            0: soundPath+'vegetal_02.mp3',
         },
         texture: ""
     },
     {
         name: "sequoias",
         sounds: {
-            0: "",
-            1: "",
-            2: ""
+            0: soundPath+'vegetal_03.mp3',
+            1: soundPath+'vegetal_04.mp3',
         },
         texture: ""
     },
     {
         name: "river",
-        sounds: {
-            0: "",
-            1: "",
-            2: ""
-        },
         texture: ""
     },
     {
         name: "houses",
         sounds: {
-            0: "",
-            1: "",
-            2: ""
+            0: soundPath+'maison_01.mp3',
         },
         texture: ""
     },
     {
         name: "animals",
         sounds: {
-            0: "",
-            1: "",
-            2: ""
+            0: soundPath+'animaux_01.mp3',
+            1: soundPath+'animaux_02.mp3',
         },
         texture: ""
-    }
+    },
+    {
+        name: "field",
+        sounds: {
+            0: soundPath+'champs_01.mp3',
+            1: soundPath+'champs_02.mp3',
+            2: soundPath+'champs_03.mp3',
+        },
+        texture: ""
+    },
+    {
+        name: "seed",
+        sounds: {
+            0: soundPath+'animaux_01.mp3',
+            1: soundPath+'animaux_02.mp3',
+        },
+        texture: ""
+    },
+    {
+        name: "factory",
+        sounds: {
+            0: soundPath+'usine_01.mp3',
+            1: soundPath+'usine_02.mp3',
+        },
+        texture: ""
+    },
+
 ]
 
 export const nextEntities = {

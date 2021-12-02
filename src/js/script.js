@@ -1,16 +1,12 @@
 import * as THREE from 'three'
-// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from 'lil-gui'
 import gsap from 'gsap';
-
 import {SETTINGS} from "../settings/settings";
 import {Vector2} from 'three';
-
 import Game from "../gameManager/gameManager";
-
 import Land from "./land";
-import { tuileTypesList } from './entities/entities';
-import { random } from 'gsap/all';
+import {tuileTypesList} from './entities/entities';
+import AudioManager from "../audioManager/audioManager";
 
 /**
  * Debug
@@ -23,6 +19,8 @@ const parameters = {
 }
 
 const textureLoader = new THREE.TextureLoader();
+
+
 /**
  * Base
  */
@@ -91,7 +89,7 @@ const seedTexture = textureLoader.load("/jeune_pousse.png", (texture) => {
 const getRandomLand = () => {
     const randomNumber = Math.round(Math.random() * 4);
     const tuileType = SETTINGS.tuileTypes[tuileTypesList[randomNumber].name];
-    if(tuileType.proportionOnTheMapAtStart >= tuileType.counter) {
+    if (tuileType.proportionOnTheMapAtStart >= tuileType.counter) {
         tuileType.counter++;
         // console.log(tuileType.counter)
         return tuileType[randomNumber];
@@ -100,13 +98,29 @@ const getRandomLand = () => {
     }
 }
 
+const types = ['sapins','deadLeaf','sequoias','houses','animals','river']
 
 setTimeout(() => {
     for (let j = 0; j < 8; j++) {
         let offsetX = j % 2 === 1 ? cellsSize : 0;
-
         for (let i = 0; i < 15; i++) {
-            const randomNumber = Math.round(Math.random() * 4);
+            let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
+            let randomNumber
+
+            if (SETTINGS.riverMapAtStart.some((element) => {
+                if (element[0] === x && element[1] === j) {
+                    return true
+                }
+            })) {
+                randomNumber = 3
+            } else {
+                randomNumber = Math.round(Math.random() * 5)
+                while (randomNumber === 3 || SETTINGS.tuileTypes[types[randomNumber]].counter === SETTINGS.tuileTypes[types[randomNumber]].qtyOnTheMapAtStart){
+                    randomNumber = Math.round(Math.random() * 5)
+                }
+                SETTINGS.tuileTypes[types[randomNumber]].counter ++
+            }
+
             const cylinder = new THREE.Mesh(
                 new THREE.CylinderGeometry(cellsSize, cellsSize, .01, 6),
                 new THREE.MeshBasicMaterial({color: '#ffffff', map: tuileTypesList[randomNumber].texture})
@@ -114,8 +128,6 @@ setTimeout(() => {
 
             cylinder.position.x = i * (cellsSize * 2) + offsetX;
             cylinder.position.z = j * (cellsSize * 1.75);
-
-            let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
 
             // const randomLand = getRandomLand();
 
@@ -145,13 +157,13 @@ setTimeout(() => {
 
 const game = new Game(lands);
 
+
 gui.add(game, "startGame");
 gui.add(game, "pauseGame");
 gui.add(game, "resetGame");
 gui.add(game, "checkProportionsOnTheMap");
 gui.add(game, "seeUsine");
 gui.add(game, "useJoker");
-
 
 
 //Rose des Vents
@@ -176,7 +188,7 @@ const setIntervalWindRose = setInterval(() => {
     const windRose = document.querySelector(".wind-needle");
     currentWindDirection = SETTINGS.windRoseAngles[getRandomNumberBetweenZeroAndFive()];
 
-    windRose.style.transform = `translate(-50%, -50%) rotate(${currentWindDirection}deg)`;
+    windRose.style.transform = `rotate(${currentWindDirection}deg)`;
 
     // getWindRoseTime();
     // console.log(windRoseTime)
@@ -304,11 +316,11 @@ const clickOnLand = () => {
         game.setCurrentLand(selectedLand, fireTexture);
         game.setCurrentLandNeighbour(neighbour, fireTexture);
         // console.log(neighbour)
-        
+
         // selectedLand.mesh.material.color.setHex(0xff0000)
-        
+
         game.setCurrentLandNeighbours(getLandNeighbours(selectedLand));
-        
+
         // neighbour.mesh.material.color.setHex(0x5900ff)
         // console.log('neighbour')
         // console.log(neighbour)
@@ -326,19 +338,26 @@ window.addEventListener('click', clickOnLand)
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 0.1, 100)
 // camera.position.z = 6
-camera.position.set(7.25, 14.88, 4);
+camera.position.set(7.25, 14.88, 3.65);
 camera.rotation.set(-1.545, 0, 0);
 
 gui.add(camera.position, 'z', -10, 10)
 scene.add(camera)
 
 /**
+ * Sound
+ */
+const audioManager = new AudioManager(camera,scene);
+audioManager.init()
+
+/**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+    canvas: canvas,
+    alpha: true,
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))

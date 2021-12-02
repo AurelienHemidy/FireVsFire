@@ -1,5 +1,5 @@
 import {Vector2} from "three";
-
+import * as THREE from "three";
 export const SETTINGS = {
     gameSettings: {
         durationOfAGame: 180000,
@@ -20,6 +20,8 @@ export const SETTINGS = {
             canBurn: true,
             counter: 0,
             proportionOnTheMapAtStart: 26,
+            qtyOnTheMapAtStart: 31,
+            sound: '',
             whenBurnt: () => getSapinsBurnt(),
             whenGrow: () => getSeedGrow()
         },
@@ -27,59 +29,72 @@ export const SETTINGS = {
             canBurn: true,
             counter: 0,
             proportionOnTheMapAtStart: 30,
+            qtyOnTheMapAtStart: 36,
+            sound: '',
             whenBurnt: () => getDeadLeafBurnt()
         },
         sequoias: {
             canBurn: false,
             counter: 0,
             proportionOnTheMapAtStart: 14,
+            qtyOnTheMapAtStart: 17,
+            sound: '',
             whenBurnt: () => getSequioasBurnt()
+        },
+        river: {
+            canBurn: false,
+            counter: 0,
+            proportionOnTheMapAtStart: 12,
+            qtyOnTheMapAtStart: 14,
+            sound: '',
         },
         houses: {
             canBurn: false,
             counter: 0,
             proportionOnTheMapAtStart: 10,
+            qtyOnTheMapAtStart: 12,
+            sound: '',
             whenBurnt: () => getSequioasBurnt()
         },
         animals: {
             canBurn: false,
             counter: 0,
             proportionOnTheMapAtStart: 8,
+            qtyOnTheMapAtStart: 10,
+            sound: '',
             whenBurnt: () => getSequioasBurnt()
-        },
-        river: {
-            canBurn: false,
-            counter: 0,
-            proportionOnTheMapAtStart: 12
         },
         field: {
             canBurn: false,
             counter: 0,
             proportionOnTheMapAtStart: 0,
+            sound: '',
             whenBurnt: () => getFieldBurnt()
         },
         seed: {
             canBurn: false,
             counter: 0,
+            sound: '',
             proportionOnTheMapAtStart: 0
         },
         factory: {
             name: "Electric & Cie",
             canBurn: false,
             counter: 0,
+            sound: '',
             proportionOnTheMapAtStart: 0,
         }
     },
 
     riverMapAtStart: [
-        new Vector2(6, 0), new Vector2(24, 0),
-        new Vector2(5, 1), new Vector2(25, 1),
-        new Vector2(6, 2),
-        new Vector2(7, 3),
-        new Vector2(6, 4),new Vector2(8, 4), new Vector2(20, 4),
-        new Vector2(19, 5),new Vector2(21, 5),
-        new Vector2(20, 6),
-        new Vector2(19, 7),
+        [6, 0], [24, 0],
+        [5, 1], [25, 1],
+        [6, 2],
+        [7, 3],
+        [6, 4],[8, 4], [20, 4],
+        [19, 5],[21, 5],
+        [20, 6],
+        [19, 7],
     ],
 
     jokers: {
@@ -96,6 +111,11 @@ export const SETTINGS = {
             }
         }
     }
+}
+
+
+const playSound = (typeOfTile) =>{
+
 }
 
 const getSapinsBurnt = () => {
