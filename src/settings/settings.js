@@ -86,11 +86,13 @@ export const SETTINGS = {
         canadair: {
             quantity: 3,
             useCanadair() {
-                if (this.quantity < 1)
-                    return console.log("There's no canadair anymore")
-
-                this.quantity--;
-                console.log(this.quantity);
+                if (this.quantity < 1){
+                    return false
+                } else {
+                    this.quantity--;
+                    console.log(this.quantity);
+                    return true;
+                }    
             }
         }
     }
@@ -140,5 +142,16 @@ const getSeedGrow = () => {
         return 'sapins';
     } else {
         return 'sequoias';
+    }
+}
+
+export const getFactoryBurnt = () => {
+    const randomNumber = Math.round(Math.random() * 3);
+    if (randomNumber === 0 || randomNumber === 1) {
+        return 'deadLeaf';
+    } else if(randomNumber === 2) {
+        return 'houses';
+    } else {
+        return 'animaux';
     }
 }

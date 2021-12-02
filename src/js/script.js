@@ -32,6 +32,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+scene.background = new THREE.Color( 0xFFF9F8 );
 
 const rotateZ = {
     rotate() {
@@ -148,6 +149,8 @@ gui.add(game, "startGame");
 gui.add(game, "pauseGame");
 gui.add(game, "resetGame");
 gui.add(game, "checkProportionsOnTheMap");
+gui.add(game, "seeUsine");
+gui.add(game, "useJoker");
 
 
 
@@ -292,7 +295,7 @@ const clickOnLand = () => {
     let neighbour
     if (currentIntersect) {
         selectedLand = getLandByUUID(currentIntersect.object.uuid)
-        if(selectedLand.type.name === "river" || selectedLand.type.name === "factory")
+        if(selectedLand.type.name === "river" || selectedLand.type.name === "factory" || selectedLand.isBurnt === true)
             return
         // game.setCurrentLand(selectedLand);
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
