@@ -10,6 +10,7 @@ import Game from "../gameManager/gameManager";
 
 import Land from "./land";
 import { tuileTypesList } from './entities/entities';
+import { random } from 'gsap/all';
 
 /**
  * Debug
@@ -65,60 +66,94 @@ let lands = [];
 let landMeshes = [];
 let selectedLand = null;
 
-setTimeout(() => {
-    console.log(tuileTypesList)
-}, 2000);
+// setTimeout(() => {
+//     const randomNumber = Math.round(Math.random() * 4);
+//     const randomType = tuileTypesList[randomNumber];
+//     const tuileType = SETTINGS.tuileTypes[tuileTypesList[randomNumber].name];
+//     if(tuileType.proportionOnTheMapAtStart >= tuileType.counter) {
+//         tuileType.counter++;
+//         console.log(tuileType.counter)
+//     } else {
+//         console.log('lets do it again');
+//     }
+//     // console.log(randomType)
+// }, 2000);
 
 const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
-    texture.rotation = 1.5708
+    texture.rotation = 1.5708;
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.NearestFilter
 })
-const textureTest2 = textureLoader.load("/feu_500.png", (texture) => {
+const textureTest2 = textureLoader.load("/animaux.png", (texture) => {
+    texture.center = new Vector2(0.5, 0.5);
+    texture.rotation = 1.5708;
+    texture.magFilter = THREE.NearestFilter
+    texture.minFilter = THREE.NearestFilter
+    texture.repeat.set(1.16, 1.01);
+})
+const seedTexture = textureLoader.load("/jeune_pousse.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.NearestFilter
-})
+    texture.repeat.set(1.16, 1.01);
+});
 
-for (let j = 0; j < numberOfGridCellOnOneLine; j++) {
-    let offsetX = j % 2 === 1 ? cellsSize : 0;
-
-    for (let i = 0; i < numberOfGridCellOnOneLine; i++) {
-        const cylinder = new THREE.Mesh(
-            new THREE.CylinderGeometry(cellsSize, cellsSize, .05, 6),
-            new THREE.MeshBasicMaterial({color: '#ffffff', map: textureTest2})
-        );
-
-        cylinder.position.x = i * (cellsSize * 2) + offsetX;
-        cylinder.position.z = j * (cellsSize * 1.75);
-
-        let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
-
-        const newRandomNumber = Math.random() * (numberOfGridCellOnOneLine^2);
-
-        let land = new Land(
-            cylinder,
-            new Vector2(x, j),
-            'tree',
-            5,
-            new Vector2(x - 1, j - 1),
-            new Vector2(x + 1, j - 1),
-            new Vector2(x - 2, j),
-            new Vector2(x + 2, j),
-            new Vector2(x - 1, j + 1),
-            new Vector2(x + 1, j + 1),)
-
-        // add land object to land object list
-        lands.push(land)
-
-        // add land mesh to land mesh list
-        landMeshes.push(cylinder)
-
-        scene.add(cylinder);
+const getRandomLand = () => {
+    const randomNumber = Math.round(Math.random() * 4);
+    const tuileType = SETTINGS.tuileTypes[tuileTypesList[randomNumber].name];
+    if(tuileType.proportionOnTheMapAtStart >= tuileType.counter) {
+        tuileType.counter++;
+        // console.log(tuileType.counter)
+        return tuileType[randomNumber];
+    } else {
+        getRandomLand();
     }
 }
+
+
+setTimeout(() => {
+    for (let j = 0; j < 8; j++) {
+        let offsetX = j % 2 === 1 ? cellsSize : 0;
+    
+        for (let i = 0; i < 15; i++) {
+            const randomNumber = Math.round(Math.random() * 4);
+            const cylinder = new THREE.Mesh(
+                new THREE.CylinderGeometry(cellsSize, cellsSize, .01, 6),
+                new THREE.MeshBasicMaterial({color: '#ffffff', map: tuileTypesList[randomNumber].texture})
+            );
+    
+            cylinder.position.x = i * (cellsSize * 2) + offsetX;
+            cylinder.position.z = j * (cellsSize * 1.75);
+    
+            let x = j % 2 === 1 ? 2 * i + 1 : 2 * i;
+            
+            // const randomLand = getRandomLand();
+        
+            let land = new Land(
+                cylinder,
+                new Vector2(x, j),
+                tuileTypesList[randomNumber],
+                5,
+                new Vector2(x - 1, j - 1),
+                new Vector2(x + 1, j - 1),
+                new Vector2(x - 2, j),
+                new Vector2(x + 2, j),
+                new Vector2(x - 1, j + 1),
+                new Vector2(x + 1, j + 1),)
+    
+            // add land object to land object list
+            lands.push(land)
+    
+            // add land mesh to land mesh list
+            landMeshes.push(cylinder)
+    
+            scene.add(cylinder);
+        }
+    }
+}, 1000);
+
 
 const game = new Game(lands);
 
@@ -292,7 +327,7 @@ window.addEventListener('click', clickOnLand)
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
 // camera.position.z = 6
-camera.position.set(4.55, 14.88, 4.26);
+camera.position.set(7.25, 14.88, 4);
 camera.rotation.set(-1.545, 0, 0);
 
 gui.add(camera.position, 'z', -10, 10)

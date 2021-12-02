@@ -9,8 +9,50 @@ const getAllTextures = () => {
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
         texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
         tuileTypesList[0].texture = texture;
     });
+    const deadLeaf = textureLoader.load("/branche.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        tuileTypesList[1].texture = texture;
+    });
+    const sequoiasTexture = textureLoader.load("/sequoia.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        tuileTypesList[2].texture = texture;
+    });
+    const riverTexture = textureLoader.load("/riviere.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        tuileTypesList[3].texture = texture;
+    });
+    const housesTexture = textureLoader.load("/maison.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        tuileTypesList[4].texture = texture;
+    });
+    const animalsTexture = textureLoader.load("/animaux.png", (texture) => {
+        texture.center = new Vector2(0.5, 0.5);
+        texture.rotation = 1.5708
+        texture.magFilter = THREE.NearestFilter
+        texture.minFilter = THREE.NearestFilter
+        texture.repeat.set(1.16, 1.01);
+        tuileTypesList[5].texture = texture;
+    });
+
 
 }
 
@@ -45,6 +87,15 @@ export const tuileTypesList = [
         texture: ""
     },
     {
+        name: "river",
+        sounds: {
+            0: "",
+            1: "",
+            2: ""
+        },
+        texture: ""
+    },
+    {
         name: "houses",
         sounds: {
             0: "",
@@ -61,14 +112,5 @@ export const tuileTypesList = [
             2: ""
         },
         texture: ""
-    },
-    {
-        name: "field",
-        sounds: {
-            0: "",
-            1: "",
-            2: ""
-        },
-        texture: ""
-    },
+    }
 ]

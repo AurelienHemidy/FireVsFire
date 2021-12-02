@@ -16,46 +16,55 @@ export const SETTINGS = {
     tuileTypes: {
         sapins: {
             canBurn: true,
+            counter: 0,
             proportionOnTheMapAtStart: 26,
             whenBurnt: () => getSapinsBurnt(),
             whenGrow: () => getSeedGrow()
         },
         deadLeaf: {
             canBurn: true,
+            counter: 0,
             proportionOnTheMapAtStart: 30,
             whenBurnt: () => getDeadLeafBurnt()
         },
-        sequioas: {
+        sequoias: {
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 14,
             whenBurnt: () => getSequioasBurnt()
         },
         houses: {
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 10,
             whenBurnt: () => getSequioasBurnt()
         },
         animals: {
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 8,
             whenBurnt: () => getSequioasBurnt()
         },
         river: {
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 12
         },
         field: {
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 0,
             whenBurnt: () => getFieldBurnt()
         },
         seed: {
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 0
         },
         factory: {
             name: "Electric & Cie",
             canBurn: false,
+            counter: 0,
             proportionOnTheMapAtStart: 0,
         }
     },
