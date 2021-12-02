@@ -2,6 +2,7 @@ import { SETTINGS } from '../settings/settings';
 import { tuileTypesList, nextEntities } from "../js/entities/entities";
 import gsap from 'gsap';
 import bindAll from "../js/utils/bindAll";
+import { countDown } from '../js/utils/countDown'
 
 class Game {
     constructor(lands) {
@@ -20,6 +21,12 @@ class Game {
         this.isSequoiasNearbyNeighbour = false;
         this.arrayCurrentLandNeighbourNeighbours = [];
         this.arrayCurrentLand = [];
+
+        this.deadLeafTotalAtTheEnd = 0;
+        this.sequoiasTotalAtTheEnd = 0;
+        this.housesTotalAtTheEnd = 0;
+        this.animalsTotalAtTheEnd = 0;
+        this.usineTotalAtTheEnd = 0;
     }
 
     setCurrentGameTime(newTime) {
@@ -103,9 +110,10 @@ class Game {
     }
 
     startGame() {
-        this.time = setInterval(() => {
-            this.everyDayCheck();
-        }, SETTINGS.gameSettings.durationOfADay)
+        countDown("clock", 5, 0);
+        // this.time = setInterval(() => {
+            
+        // }, 1000)
     }
 
     pauseGame() {
@@ -505,6 +513,23 @@ class Game {
 
     checkProportionsOnTheMap() {
         //On check combien de tuile de tel truc est la ou pas
+ 
+        this.lands.map(land => {
+            switch(land.type.name) {
+                case "deadLeaf": this.deadLeafTotalAtTheEnd++;
+                    break;
+                case "sequoias": this.sequoiasTotalAtTheEnd++;
+                    break;
+                case "houses": this.housesTotalAtTheEnd++;
+                    break;
+                case "animals": this.animalsTotalAtTheEnd++;
+                    break;
+                case "usine": this.usineTotalAtTheEnd++;
+                    break;
+            }
+        });
+
+        console.log(this.deadLeafTotalAtTheEnd, this.sequoiasTotalAtTheEnd, this.housesTotalAtTheEnd, this.animalsTotalAtTheEnd, this.usineTotalAtTheEnd)
     }
 
 }

@@ -147,6 +147,7 @@ const game = new Game(lands);
 gui.add(game, "startGame");
 gui.add(game, "pauseGame");
 gui.add(game, "resetGame");
+gui.add(game, "checkProportionsOnTheMap");
 
 
 
