@@ -10,7 +10,7 @@ import AudioManager from "../audioManager/audioManager";
 import ExperienceManager from "../experienceManager/ExperienceManager";
 
 const experienceManager = new ExperienceManager()
-experienceManager.switchSceneTo(3)
+experienceManager.switchSceneTo(0)
 
 
 /**
