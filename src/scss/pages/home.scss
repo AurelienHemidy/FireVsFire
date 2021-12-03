@@ -2,3 +2,92 @@
   display: flex;
   justify-content: center;
 }
+
+#intro{
+  z-index: 3;
+  position: fixed;
+  height: 100%;
+  width: 100vw;
+  //background: rosybrown;
+  #intro-left{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20vw;
+    height: 100%;
+    background: url('/UI/intro-left-img.png') no-repeat;
+    background-size: contain;
+  }
+  #intro-right{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20vw;
+    height: 100%;
+    background: url('/UI/intro-right-img.png') no-repeat;
+    background-size: contain;
+  }
+}
+
+#cine{
+  position: fixed;
+  z-index: 9;
+  width: 100vw;
+  //height: 100%;
+}
+
+.mission{
+  position: absolute;
+  z-index: 10;
+  width: 70%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+#mission2{
+  display: none;
+}
+
+.menu{
+  z-index: 12;
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2vh 1vw;
+  img{
+    width: 3.5vw;
+  }
+  .menue-right{
+    img{
+      margin-left: 1vw;
+    }
+  }
+}
+
+.canadair{
+  z-index: 12;
+  position: fixed;
+  display: flex;
+  justify-content: end;
+  bottom: 1vw;
+  width: 100px;
+  right: 10vw;
+  img{
+    margin-left: 1.5vw;
+    width: 4.5vw;
+  }
+}
+
+#logo2{
+  z-index: 10;
+  position: fixed;
+  //height: 35vh;
+  top: -140px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.15);
+}

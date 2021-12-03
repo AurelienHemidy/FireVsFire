@@ -7,6 +7,11 @@ import Game from "../gameManager/gameManager";
 import Land from "./land";
 import {tuileTypesList} from './entities/entities';
 import AudioManager from "../audioManager/audioManager";
+import ExperienceManager from "../experienceManager/ExperienceManager";
+
+const experienceManager = new ExperienceManager()
+experienceManager.switchSceneTo(3)
+
 
 /**
  * Debug
@@ -305,7 +310,7 @@ const getLandNeighbourByCurrentWindDirection = (land) => {
 
 const clickOnLand = () => {
     let neighbour
-    if (currentIntersect) {
+    if (experienceManager.currentScene===3 && currentIntersect) {
         selectedLand = getLandByUUID(currentIntersect.object.uuid)
         if(selectedLand.type.name === "river" || selectedLand.type.name === "factory" || selectedLand.isBurnt === true)
             return

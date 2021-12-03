@@ -2,44 +2,131 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>California Forest</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>California Forest</title>
 </head>
 
 <body>
 
-  <!-- <div class="fire">
-    <h1>FireVsFire</h1>
-  </div> -->
 
-  <canvas class="webgl"></canvas>
+<header>
 
-  <div class="indicators">
-    <div class="indicators-item">
-      <div class="indicators-item-img">
-
-      </div>
-      <div class="indicators-item-qty-current">
-
-      </div>
-      <div class="indicators-item-qty-limit">
-        <div class="indicators-item-limit-unity">
-
+</header>
+<!-- <div class="fire">
+  <h1>FireVsFire</h1>
+</div> -->
+<div id="intro">
+    <div id="intro-left">
+    </div>
+    <button class="button-sketch" id="button-start">
+        Jouer
+    </button>
+    <div id="intro-right">
+    </div>
+    <img src="/logo.png" id="logo">
+</div>
+<video hidden id="cine">
+    <source src="/cine.mp4"
+            type="video/mp4">
+    Sorry, your browser doesn't support embedded videos.
+</video>
+<div hidden id="scene-2">
+    <div id="cover-background"></div>
+    <img class="mission" src="/mission1.png" alt="" id="mission1">
+    <img class="mission" src="/mission2.png" alt="" id="mission2">
+</div>
+<div hidden id="scene-3">
+    <div class="menu">
+        <div class="">
+            <img src="UI/MAISON.png" alt="" id="backHome">
         </div>
-      </div>
+        <div class="menue-right">
+            <img src="UI/SON_OFF.png" alt="" id="sound_off">
+            <img src="UI/SON_ON.png" alt="" id="sound_on">
+            <img src="UI/INFO.png" alt="" id="info">
+        </div>
     </div>
+    <div class="canadair">
+        <img src="UI/CANADAIR.png" alt="" class="canadair-item">
+        <img src="UI/CANADAIR.png" alt="" class="canadair-item">
+        <img src="UI/CANADAIR.png" alt="" class="canadair-item">
+    </div>
+    <img src="/logo.png" id="logo2">
+    <canvas class="webgl"></canvas>
+    <div class="indicators" hidden>
+        <div class="indicators-item">
+            <img class="indicators-item-img" src="/indicator/feu.png">
+            <div class="indicators-item-qty-current">
+                10
+            </div>
+            <div class="indicators-item-qty-limit">
 
-  </div>
-  <div class="wind-rose">
-    <div class="wind-needle">
-      <div class="wind-pointer"></div>
+            </div>
+            <div class="indicators-item-qty-unity">
+
+            </div>
+        </div>
+        <div class="indicators-item">
+            <img class="indicators-item-img" src="/indicator/sequoia.png">
+            <div class="indicators-item-qty-current">
+                10
+            </div>
+            <div class="indicators-item-qty-limit">
+                /30
+            </div>
+            <div class="indicators-item-qty-unity">
+                Min
+            </div>
+        </div>
+        <div class="indicators-item">
+            <img class="indicators-item-img" src="/indicator/maison.png">
+            <div class="indicators-item-qty-current">
+                10
+            </div>
+            <div class="indicators-item-qty-limit">
+                /10
+            </div>
+            <div class="indicators-item-qty-unity">
+                Min
+            </div>
+        </div>
+        <div class="indicators-item">
+            <img class="indicators-item-img" src="/indicator/animaux.png">
+            <div class="indicators-item-qty-current">
+                10
+            </div>
+            <div class="indicators-item-qty-limit">
+                /30
+            </div>
+            <div class="indicators-item-qty-unity">
+                Min
+            </div>
+        </div>
+        <div class="indicators-item">
+            <img class="indicators-item-img" src="/indicator/usine.png">
+            <div class="indicators-item-qty-current">
+                10
+            </div>
+            <div class="indicators-item-qty-limit">
+                /30
+            </div>
+            <div class="indicators-item-qty-unity">
+                Max
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="footer">
-    <div class="footer-timer">
-      <div class="footer-timer-time">2:38</div>
+    <div hidden class="wind-rose">
+        <div class="wind-needle">
+            <div class="wind-pointer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div hidden class="footer-timer">
+        <div class="footer-timer-time">2:38</div>
     </div>
     <div class="footer-bar"></div>
-  </div>
+</div>
 </body>

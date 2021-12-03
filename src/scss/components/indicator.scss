@@ -4,6 +4,8 @@
     height: 100%;
     left: 0;
     top: 20vh;
+
+
     .indicators-item{
         position: relative;
         width: 11vw;
@@ -12,5 +14,23 @@
         border-radius: 0px 50px 50px 0;
         background: white;
         margin-bottom: 1.8vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        font-size: 22px;
+        .indicators-item-img{
+            width: 50px;
+        }
+
+        .indicators-item-qty-limit{
+            font-size: 14px;
+        }
+
+        .indicators-item-qty-unity{
+            font-size: 12px;
+            transform: scale(0.8);
+        }
     }
+
 }
