@@ -329,6 +329,7 @@ const clickOnLand = () => {
 
         game.setCurrentLandNeighbours(getLandNeighbours(selectedLand));
 
+        game.checkProportionsOnTheMap();
         // neighbour.mesh.material.color.setHex(0x5900ff)
         // console.log('neighbour')
         // console.log(neighbour)
