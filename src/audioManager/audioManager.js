@@ -8,6 +8,7 @@ class AudioManager {
         this.camera = camera
         this.scene = scene
         this.loader = new THREE.AudioLoader();
+        this.fire = new THREE.Audio(this.audioListener);
         this.ambianceStart = new THREE.Audio(this.audioListener);
         this.ambianceEnd = new THREE.Audio(this.audioListener);
         this.clic_cta = new THREE.Audio(this.audioListener);
@@ -33,6 +34,7 @@ class AudioManager {
         this.loaderProcess(this.timer, '/sound/timer.mp3')
         this.loaderProcess(this.canadair1, '/sound/canadair_01.mp3')
         this.loaderProcess(this.canadair2, '/sound/canadair_02.mp3')
+        this.loaderProcess(this.fire, '/sound/feu_01.mp3')
     }
 
     loaderProcess(audio, url){

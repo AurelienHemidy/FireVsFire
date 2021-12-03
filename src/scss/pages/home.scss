@@ -51,6 +51,18 @@
   }
 }
 
+#win-page{
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 #mission2{
   display: none;
 }

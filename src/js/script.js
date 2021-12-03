@@ -13,9 +13,9 @@ import ExperienceManager from "../experienceManager/ExperienceManager";
 /**
  * Debug
  */
-const gui = new dat.GUI()
+// const gui = new dat.GUI()
 
-gui.close();
+// gui.close();
 
 const parameters = {
     materialColor: '#ffeded',
@@ -45,7 +45,7 @@ const rotateZ = {
     }
 }
 
-gui.add(rotateZ, "rotate");
+// gui.add(rotateZ, "rotate");
 
 //Lights
 
@@ -162,12 +162,12 @@ setTimeout(() => {
 const game = new Game(lands);
 
 
-gui.add(game, "startGame");
-gui.add(game, "pauseGame");
-gui.add(game, "resetGame");
-gui.add(game, "checkProportionsOnTheMap");
-gui.add(game, "seeUsine");
-gui.add(game, "useJoker");
+// gui.add(game, "startGame");
+// gui.add(game, "pauseGame");
+// gui.add(game, "resetGame");
+// gui.add(game, "checkProportionsOnTheMap");
+// gui.add(game, "seeUsine");
+// gui.add(game, "useJoker");
 
 
 //Rose des Vents
@@ -314,6 +314,7 @@ const clickOnLand = () => {
         if(selectedLand.type.name === "river" || selectedLand.type.name === "factory" || selectedLand.isBurnt === true)
             return
         // game.setCurrentLand(selectedLand);
+        // experienceManager.fire()
         SETTINGS.tuileTypes[selectedLand.type.name].sound.play()
         neighbour = getLandNeighbourByCurrentWindDirection(selectedLand)
         game.setCurrentLandNeighbourNeighbours(getLandNeighbours(neighbour));
@@ -349,7 +350,7 @@ const camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 0.1, 
 camera.position.set(7.25, 14.88, 3.65);
 camera.rotation.set(-1.545, 0, 0);
 
-gui.add(camera.position, 'z', -10, 10)
+// gui.add(camera.position, 'z', -10, 10)
 scene.add(camera)
 
 /**

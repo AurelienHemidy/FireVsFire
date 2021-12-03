@@ -1,6 +1,5 @@
 import gsap from "gsap";
 import {countDown} from '../js/utils/countDown';
-import AudioManager from "../audioManager/audioManager";
 
 export default class ExperienceManager {
     constructor(audioManager) {
@@ -59,9 +58,21 @@ export default class ExperienceManager {
             case 3:
                 this.setCurrentScene(3)//game
                 this.playScene3();
+                // countDown("footer-timer-time", 0, 4);
+                // setTimeout(() => {
+                //     this.audioManager.timer.play()
+                //     this.switchSceneTo(4)
+                // }, 4000)
                 countDown("footer-timer-time", 3, 0);
-                setTimeout(()=>this.audioManager.timer.play(), 180000)
+                setTimeout(() => {
+                    this.audioManager.timer.play()
+                    this.switchSceneTo(4)
+                }, 181000)
                 break
+            case 4:
+                this.setCurrentScene(4)//winpage
+                this.playScene4();
+                break;
         }
     }
 
@@ -80,7 +91,7 @@ export default class ExperienceManager {
                     }, {
                         volume: 0.6,
                         scale: 1.08,
-                        transform:"translate(-50%,0)",
+                        transform: "translate(-50%,0)",
                         duration: 8
                     }
                 )
@@ -203,5 +214,50 @@ export default class ExperienceManager {
                 duration: 2
             }
         )
+    }
+
+    playScene4() {
+        let winPage = document.getElementById('win-page')
+        gsap.fromTo(['#scene-3', '.footer', '.indicators'], {
+            opacity: 1,
+        }, {
+            opacity: 0,
+            display: 'none',
+            duration: 2
+        })
+        gsap.fromTo(['#scene-4', winPage], {
+                opacity: 0,
+            },
+            {
+                opacity: 1,
+                display: 'block',
+                duration: 4
+            })
+        winPage.addEventListener('click',
+            () => {
+                this.audioManager.clic_cta.play()
+                gsap.to(winPage, {
+                    opacity: 0,
+                    display: 'none',
+                    duration: 2,
+                    onComplete: () => this.switchSceneTo(3)
+                })
+            })
+
+        // gsap.to(["#intro"], {
+        //     opacity: 0,
+        //     display: 'none'
+        // });
+        // gsap.fromTo('#scene-2', {
+        //     opacity: 0,
+        // }, {
+        //     opacity: 1,
+        //     duration: 2,
+        //     display: 'block',
+        // })
+
+    }
+    fire(){
+        this.audioManager.fire.play()
     }
 }
