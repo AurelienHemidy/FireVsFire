@@ -126,7 +126,7 @@ class Game {
     }
 
     startGame() {
-        countDown("clock", 5, 0);
+        
         // this.time = setInterval(() => {
             
         // }, 1000)

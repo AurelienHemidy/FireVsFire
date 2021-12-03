@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import { countDown } from '../js/utils/countDown';
 
 export default class ExperienceManager {
     constructor() {
@@ -41,6 +42,7 @@ export default class ExperienceManager {
             case 3:
                 this.setCurrentScene(3)//game
                 this.playScene3();
+                countDown("footer-timer-time", 5, 0);
                 break
         }
     }
