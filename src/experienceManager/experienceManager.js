@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { countDown } from '../js/utils/countDown';
+import {countDown} from '../js/utils/countDown';
 import AudioManager from "../audioManager/audioManager";
 
 export default class ExperienceManager {
@@ -32,7 +32,7 @@ export default class ExperienceManager {
                 this.audioManager.clic_cta.play()
                 gsap.from("#button-start", {
                     opacity: 0,
-                    scale:0,
+                    scale: 0,
                     duration: 4
                 });
             })
@@ -60,26 +60,30 @@ export default class ExperienceManager {
                 this.setCurrentScene(3)//game
                 this.playScene3();
                 countDown("footer-timer-time", 3, 0);
-                setTimeout(this.audioManager.timer.play(), 3000)
+                setTimeout(()=>this.audioManager.timer.play(), 180000)
                 break
         }
     }
 
     playScene1() {
         let cine = document.getElementById('cine')
-        gsap.to(["#intro",".footer"], {
+        gsap.to(["#intro", ".footer"], {
             opacity: 0,
             duration: 2,
             display: "none",
             onComplete: () => {
+                cine.play()
                 gsap.fromTo(cine, {
-                        volume: 0
+                        volume: 0,
+                        scale: 1,
+                        // transform:"translate(-50%,-50%)"
                     }, {
                         volume: 0.6,
-                        duration: 1
+                        scale: 1.08,
+                        transform:"translate(-50%,0)",
+                        duration: 8
                     }
                 )
-                cine.play()
                 gsap.fromTo(cine, {
                     display: "block",
                     opacity: 0,
@@ -105,6 +109,7 @@ export default class ExperienceManager {
         let mission2 = document.getElementById('mission2')
         mission1.addEventListener('click',
             () => {
+                this.audioManager.clic_cta.play()
                 gsap.to(mission1, {
                     opacity: 0,
                     display: 'none',
@@ -121,6 +126,7 @@ export default class ExperienceManager {
             })
         mission2.addEventListener('click',
             () => {
+                this.audioManager.clic_cta.play();
                 gsap.to('#scene-2', {
                     autoAlpha: 0,
                     duration: 1.5,
@@ -162,12 +168,12 @@ export default class ExperienceManager {
             display: 'none'
         });
         gsap.fromTo([".webgl"], {
-            scale:0.7,
-        },{
-            scale:1,
-            duration:2
+            scale: 0.7,
+        }, {
+            scale: 1,
+            duration: 2
         });
-        gsap.fromTo(['#scene-3','.footer'], {
+        gsap.fromTo(['#scene-3', '.footer'], {
             opacity: 0,
         }, {
             opacity: 1,
@@ -175,26 +181,26 @@ export default class ExperienceManager {
             duration: 2
         })
         gsap.fromTo(
-            ['.indicators','.wind-rose'], {
-                y:100
+            ['.indicators', '.wind-rose'], {
+                y: 100
             },
             {
-                y:0,
-                opacity:1,
-                display:'block',
-                duration:2
+                y: 0,
+                opacity: 1,
+                display: 'block',
+                duration: 2
             }
         )
         gsap.fromTo(
             '.footer-timer', {
-                y:100,
-                x:'-50%',
+                y: 100,
+                x: '-50%',
             },
             {
-                y:0,
-                opacity:1,
-                display:'block',
-                duration:2
+                y: 0,
+                opacity: 1,
+                display: 'block',
+                duration: 2
             }
         )
     }
