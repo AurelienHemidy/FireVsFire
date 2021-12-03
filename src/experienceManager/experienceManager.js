@@ -1,9 +1,11 @@
 import gsap from "gsap";
 import { countDown } from '../js/utils/countDown';
+import AudioManager from "../audioManager/audioManager";
 
 export default class ExperienceManager {
-    constructor() {
+    constructor(audioManager) {
         this.currentScene = 0 //landing page
+        this.audioManager = audioManager;
     }
 
     landing() {
@@ -24,7 +26,16 @@ export default class ExperienceManager {
             // scale: 0.7,
             duration: 4
         });
-        document.getElementById('button-start').addEventListener('click', () => this.switchSceneTo(1))
+        document.getElementById('button-start').addEventListener('click',
+            () => {
+                this.switchSceneTo(1)
+                this.audioManager.clic_cta.play()
+                gsap.from("#button-start", {
+                    opacity: 0,
+                    scale:0,
+                    duration: 4
+                });
+            })
     }
 
     switchSceneTo(toScene) {
@@ -38,18 +49,25 @@ export default class ExperienceManager {
                 break;
             case 2:
                 this.playScene2();//mission
-                break
+                this.audioManager.ambianceStart.play()
+                this.audioManager.ambianceStart.loop = true
+
+                this.audioManager.ambianceEnd.play()
+                this.audioManager.ambianceEnd.loop = true
+
+                break;
             case 3:
                 this.setCurrentScene(3)//game
                 this.playScene3();
                 countDown("footer-timer-time", 3, 0);
+                setTimeout(this.audioManager.timer.play(), 3000)
                 break
         }
     }
 
     playScene1() {
         let cine = document.getElementById('cine')
-        gsap.to("#intro", {
+        gsap.to(["#intro",".footer"], {
             opacity: 0,
             duration: 2,
             display: "none",
@@ -57,7 +75,7 @@ export default class ExperienceManager {
                 gsap.fromTo(cine, {
                         volume: 0
                     }, {
-                        volume: 1,
+                        volume: 0.6,
                         duration: 1
                     }
                 )
@@ -143,7 +161,13 @@ export default class ExperienceManager {
             opacity: 0,
             display: 'none'
         });
-        gsap.fromTo('#scene-3', {
+        gsap.fromTo([".webgl"], {
+            scale:0.7,
+        },{
+            scale:1,
+            duration:2
+        });
+        gsap.fromTo(['#scene-3','.footer'], {
             opacity: 0,
         }, {
             opacity: 1,

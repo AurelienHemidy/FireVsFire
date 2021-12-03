@@ -30,9 +30,12 @@
 }
 
 #cine{
-  position: fixed;
+  position: absolute;
   z-index: 9;
-  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
   //height: 100%;
 }
 
@@ -58,13 +61,13 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 2vh 1vw;
+  padding: 3vh 3vw;
   img{
-    width: 3.5vw;
+    width:2.5vw;
   }
   .menue-right{
     img{
-      margin-left: 1vw;
+      margin-left: 3vw;
     }
   }
 }

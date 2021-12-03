@@ -1,7 +1,6 @@
 .button-sketch{
   display: block; 
   background: url("/UI/button_play.svg") ;
-  background-size: cover;
   font-size: 28px;
   padding: 32px 60px;
   text-decoration: none;
@@ -11,6 +10,7 @@
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  font-weight: bold;
   &:hover{
     cursor: pointer;
     transform: scale(1.25);

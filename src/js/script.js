@@ -9,9 +9,6 @@ import {tuileTypesList} from './entities/entities';
 import AudioManager from "../audioManager/audioManager";
 import ExperienceManager from "../experienceManager/ExperienceManager";
 
-const experienceManager = new ExperienceManager()
-experienceManager.switchSceneTo(0)
-
 
 /**
  * Debug
@@ -356,12 +353,6 @@ gui.add(camera.position, 'z', -10, 10)
 scene.add(camera)
 
 /**
- * Sound
- */
-const audioManager = new AudioManager(camera,scene);
-audioManager.init()
-
-/**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
@@ -370,6 +361,16 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+
+/**
+ * Sound
+ */
+const audioManager = new AudioManager(camera,scene);
+audioManager.init()
+
+const experienceManager = new ExperienceManager(audioManager)
+experienceManager.switchSceneTo(0)
 
 
 //ORBIT CONTROLS
