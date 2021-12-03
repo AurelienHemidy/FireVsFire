@@ -120,10 +120,10 @@ const playSound = (typeOfTile) =>{
 
 const getSapinsBurnt = () => {
     //Get the potential Result of a burnt Sapin
-    const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0) {
+    const randomNumber = Math.round(Math.random() * 4);
+    if (randomNumber === 1) {
         return 'champs'
-    } else if(randomNumber === 1) {
+    } else if(randomNumber === 2) {
         return 'animaux';
     } else {
         return 'jeunes pousses';
@@ -131,10 +131,10 @@ const getSapinsBurnt = () => {
 }
 const getDeadLeafBurnt = () => {
     //Get the potential Result of a burnt Sapin
-    const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0) {
+    const randomNumber = Math.round(Math.random() * 4);
+    if (randomNumber === 1) {
         return 'jeunes pousses'
-    } else if(randomNumber === 1) {
+    } else if(randomNumber === 2) {
         return 'animaux';
     } else {
         return 'champs';
@@ -148,7 +148,7 @@ const getSequiosBurnt = () => {
 const getFieldBurnt = () => {
     //Get the potential Result of a burnt Sapin
     const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0 || randomNumber === 1) {
+    if (randomNumber === 1 || randomNumber === 2) {
         return 'jeunes pousses';
     } else {
         return 'champs';
@@ -157,8 +157,8 @@ const getFieldBurnt = () => {
 
 const getSeedGrow = () => {
     //Get the potential Result of a growing seed
-    const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0 || randomNumber === 1 || randomNumber === 2) {
+    const randomNumber = Math.round(Math.random() * 4);
+    if (randomNumber === 1 || randomNumber === 2 || randomNumber === 3) {
         return 'sapins';
     } else {
         return 'sequoias';
@@ -166,12 +166,21 @@ const getSeedGrow = () => {
 }
 
 export const getFactoryBurnt = () => {
-    const randomNumber = Math.round(Math.random() * 3);
-    if (randomNumber === 0 || randomNumber === 1) {
+    const randomNumber = Math.round(Math.random() * 4);
+    if (randomNumber === 1 || randomNumber === 2) {
         return 'deadLeaf';
-    } else if(randomNumber === 2) {
+    } else if(randomNumber === 3) {
         return 'houses';
     } else {
         return 'animaux';
+    }
+}
+
+export const getTwoFieldBurnt = () => {
+    const randomNumber = Math.round(Math.random() * 4);
+    if (randomNumber === 1 || randomNumber === 2) {
+        return 'houses';
+    } else {
+        return 'factory'
     }
 }

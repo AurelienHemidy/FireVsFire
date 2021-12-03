@@ -1,4 +1,4 @@
-import { SETTINGS, getFactoryBurnt } from '../settings/settings';
+import { SETTINGS, getFactoryBurnt, getTwoFieldBurnt } from '../settings/settings';
 import { tuileTypesList, nextEntities } from "../js/entities/entities";
 import gsap from 'gsap';
 import bindAll from "../js/utils/bindAll";
@@ -23,12 +23,16 @@ class Game {
         this.arrayCurrentLand = [];
         this.jokerUsed = false;
 
+        this.canadairItems = document.querySelectorAll(".canadair-item");
+
 
         this.deadLeafTotalAtTheEnd = 0;
         this.sequoiasTotalAtTheEnd = 0;
         this.housesTotalAtTheEnd = 0;
         this.animalsTotalAtTheEnd = 0;
         this.usineTotalAtTheEnd = 0;
+
+        this.useJoker();
     }
 
     setCurrentGameTime(newTime) {
@@ -43,8 +47,17 @@ class Game {
     }
 
     useJoker() {
-        const canUseJoker = SETTINGS.jokers.canadair.useCanadair();
-        this.jokerUsed = canUseJoker;
+        // console.log(this.canadairItems)
+
+        this.canadairItems.forEach((canadairItem => {
+            canadairItem.addEventListener('click', () => {
+                gsap.to(canadairItem, { y: 10, opacity: 0, duration: .3, ease: "cubic-bezier(.24,.63,.12,1)"})
+                this.jokerUsed = true;
+            });
+            // console.log(canadairItem)
+        }));
+        // const canUseJoker = SETTINGS.jokers.canadair.useCanadair();
+        // this.jokerUsed = canUseJoker;
     }
 
     setCurrentLand(currentLand, fireTexture) {
@@ -233,63 +246,73 @@ class Game {
                         land.mesh.material.map = nextEntities.field.texture;
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLand.includes("champs")) {
-                            setTimeout(() => {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    for (const property in this.currentLandNeighbours) {
+                                        if(this.currentLandNeighbours[property].type.name !== 'river') {
+                                            this.currentLandNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }  
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            this.jokerUsed = false;
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .5;
+                                            land.isBurnt = true;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbours) {
+                                                this.currentLandNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                    }, 5000);
+                                }, 1000)
+                            } else {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
                                     land.mesh.rotation.z = 0;
                                 }, 0.7);
-                                land.type = nextEntities.factory;
-                                land.mesh.material.map = nextEntities.factory.texture;
-                                //INCENDIE SUR TOUTES LES CASES AUTOUR
-                                for (const property in this.currentLandNeighbours) {
-                                    if(this.currentLandNeighbours[property].type.name !== 'river') {
-                                        this.currentLandNeighbours[property].mesh.material.map =  this.fireTexture;
-                                    }  
-                                }
-                                setTimeout(() => {
-                                    //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                    if(this.jokerUsed) {
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            //Remettre les bonnes tuiles
-                                            const nextTypeOfTile = getFactoryBurnt();
-                                            if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbours[property].type = tuileTypesList[1];
-                                                this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                            } else if(nextTypeOfTile === "houses" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbours[property].type = tuileTypesList[4];
-                                                this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                            } else if(nextTypeOfTile === "animals" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbours[property].type = tuileTypesList[5];
-                                                this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                            }
-                                        }
-                                        this.jokerUsed = false;
-                                        land.mesh.material.transparent = true;
-                                        land.mesh.material.opacity = .5;
-                                        land.isBurnt = true;
-                                    } else {
-                                        land.mesh.material.color.setHex(0x000000);
-                                        land.isBurnt = true;
-                                        for (const property in this.currentLandNeighbours) {
-                                            this.currentLandNeighbours[property].mesh.material.transparent = true;
-                                            this.currentLandNeighbours[property].mesh.material.opacity = .5;
-                                            this.currentLandNeighbours[property].isBurnt = true;
-                                        }
-                                    }
-                                }, 5000);
-                            }, 1000)
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }
                         }
                     }, 2000)
                 }
@@ -347,6 +370,89 @@ class Game {
                         land.mesh.material.map = nextEntities.field.texture;
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLand.includes("champs")) {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    for (const property in this.currentLandNeighbours) {
+                                        if(this.currentLandNeighbours[property].type.name !== 'river') {
+                                            this.currentLandNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }  
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            this.jokerUsed = false;
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .5;
+                                            land.isBurnt = true;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbours) {
+                                                this.currentLandNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                    }, 5000);
+                                }, 1000)
+                            } else {
+                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                setTimeout(() => {
+                                    land.mesh.rotation.z = 0;
+                                }, 0.7);
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }
+                        }
+                    }, 750)
+                }
+            } else if(land.type.name === "sequoias" || land.type.name === "houses" || land.type.name === "animals") {
+                //résultat incendie sur sequioas, maisons ou animaux
+                setTimeout(() => {
+                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                        setTimeout(() => {
+                            land.mesh.rotation.z = 0;
+                        }, 0.7);
+                    land.type = nextEntities.field;
+                    land.mesh.material.map = nextEntities.field.texture;
+                    //CHECK SI IL Y A UN VOISIN CHAMP
+                    if(this.arrayCurrentLand.includes("champs")) {
+                        const nextTypeOfTile = getTwoFieldBurnt();
+                        if(nextTypeOfTile === "factory") {
                             setTimeout(() => {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
@@ -404,77 +510,14 @@ class Game {
                                     }
                                 }, 5000);
                             }, 1000)
-                        }
-                    }, 750)
-                }
-            } else if(land.type.name === "sequoias" || land.type.name === "houses" || land.type.name === "animals") {
-                //résultat incendie sur sequioas, maisons ou animaux
-                setTimeout(() => {
-                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                        setTimeout(() => {
-                            land.mesh.rotation.z = 0;
-                        }, 0.7);
-                    land.type = nextEntities.field;
-                    land.mesh.material.map = nextEntities.field.texture;
-                    //CHECK SI IL Y A UN VOISIN CHAMP
-                    if(this.arrayCurrentLand.includes("champs")) {
-                        setTimeout(() => {
+                        } else {
                             gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                             setTimeout(() => {
                                 land.mesh.rotation.z = 0;
                             }, 0.7);
-                            land.type = nextEntities.factory;
-                            land.mesh.material.map = nextEntities.factory.texture;
-                            //INCENDIE SUR TOUTES LES CASES AUTOUR
-                            for (const property in this.currentLandNeighbours) {
-                                if(this.currentLandNeighbours[property].type.name !== 'river') {
-                                    this.currentLandNeighbours[property].mesh.material.map =  this.fireTexture;
-                                }  
-                            }
-                            setTimeout(() => {
-                                //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                if(this.jokerUsed) {
-                                    for (const property in this.currentLandNeighbourNeighbours) {
-                                        //Remettre les bonnes tuiles
-                                        const nextTypeOfTile = getFactoryBurnt();
-                                        if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                            gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                            setTimeout(() => {
-                                                this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                            }, 0.7);
-                                            this.currentLandNeighbours[property].type = tuileTypesList[1];
-                                            this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                        } else if(nextTypeOfTile === "houses" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                            gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                            setTimeout(() => {
-                                                this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                            }, 0.7);
-                                            this.currentLandNeighbours[property].type = tuileTypesList[4];
-                                            this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                        } else if(nextTypeOfTile === "animals" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                            gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                            setTimeout(() => {
-                                                this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                            }, 0.7);
-                                            this.currentLandNeighbours[property].type = tuileTypesList[5];
-                                            this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                        }
-                                    }
-                                    this.jokerUsed = false;
-                                    land.mesh.material.transparent = true;
-                                    land.mesh.material.opacity = .5;
-                                    land.isBurnt = true;
-                                } else {
-                                    land.mesh.material.color.setHex(0x000000);
-                                    land.isBurnt = true;
-                                    for (const property in this.currentLandNeighbours) {
-                                        this.currentLandNeighbours[property].mesh.material.transparent = true;
-                                        this.currentLandNeighbours[property].mesh.material.opacity = .5;
-                                        this.currentLandNeighbours[property].isBurnt = true;
-                                    }
-                                }
-                            }, 5000);
-                        }, 1000)
+                            land.type = tuileTypesList[4];
+                            land.mesh.material.map = tuileTypesList[4].texture;
+                        }
                     }
                 }, 750);
             } else if(land.type.name === "champs") {
@@ -519,63 +562,74 @@ class Game {
                         land.mesh.material.map = nextEntities.field.texture;
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLand.includes("champs")) {
-                            setTimeout(() => {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    for (const property in this.currentLandNeighbours) {
+                                        if(this.currentLandNeighbours[property].type.name !== 'river') {
+                                            this.currentLandNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }  
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            this.jokerUsed = false;
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .5;
+                                            land.isBurnt = true;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbours) {
+                                                this.currentLandNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                    }, 5000);
+                                }, 1000)
+                            } else {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
                                     land.mesh.rotation.z = 0;
                                 }, 0.7);
-                                land.type = nextEntities.factory;
-                                land.mesh.material.map = nextEntities.factory.texture;
-                                //INCENDIE SUR TOUTES LES CASES AUTOUR
-                                for (const property in this.currentLandNeighbours) {
-                                    if(this.currentLandNeighbours[property].type.name !== 'river') {
-                                        this.currentLandNeighbours[property].mesh.material.map =  this.fireTexture;
-                                    }  
-                                }
-                                setTimeout(() => {
-                                    //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                    if(this.jokerUsed) {
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            //Remettre les bonnes tuiles
-                                            const nextTypeOfTile = getFactoryBurnt();
-                                            if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbours[property].type = tuileTypesList[1];
-                                                this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                            } else if(nextTypeOfTile === "houses" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbours[property].type = tuileTypesList[4];
-                                                this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                            } else if(nextTypeOfTile === "animals" && this.currentLandNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbours[property].type = tuileTypesList[5];
-                                                this.currentLandNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                            }
-                                        }
-                                        this.jokerUsed = false;
-                                        land.mesh.material.transparent = true;
-                                        land.mesh.material.opacity = .5;
-                                        land.isBurnt = true;
-                                    } else {
-                                        land.mesh.material.color.setHex(0x000000);
-                                        land.isBurnt = true;
-                                        for (const property in this.currentLandNeighbours) {
-                                            this.currentLandNeighbours[property].mesh.material.transparent = true;
-                                            this.currentLandNeighbours[property].mesh.material.opacity = .5;
-                                            this.currentLandNeighbours[property].isBurnt = true;
-                                        }
-                                    }
-                                }, 5000);
-                            }, 1000)
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }
+                           
                         }
                     }, 750);
                 }
@@ -678,63 +732,77 @@ class Game {
                         land.mesh.material.map = nextEntities.field.texture;
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
-                            setTimeout(() => {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    console.log("THELAND", land)
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    const arrayTexturesOfBurntTiles = [];
+                                    for (const property in this.currentLandNeighbourNeighbours) {
+                                        if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                            arrayTexturesOfBurntTiles.push(this.currentLandNeighbourNeighbours[property].mesh.material.map);
+                                            this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        land.mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .3;
+                                            land.isBurnt = true;
+                                            this.jokerUsed = false;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbourNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                        
+                                    }, 5000);
+                                }, 1000)
+                            } else {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
                                     land.mesh.rotation.z = 0;
                                 }, 0.7);
-                                land.type = nextEntities.factory;
-                                land.mesh.material.map = nextEntities.factory.texture;
-                                //INCENDIE SUR TOUTES LES CASES AUTOUR
-                                for (const property in this.currentLandNeighbourNeighbours) {
-                                    if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                        this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
-                                    }
-                                }
-                                setTimeout(() => {
-                                    //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                    if(this.jokerUsed) {
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            //Remettre les bonnes tuiles
-                                            const nextTypeOfTile = getFactoryBurnt();
-                                            if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    land.mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                            } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                            } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                            }
-                                        }
-                                        this.jokerUsed = false;
-                                        land.mesh.material.transparent = true;
-                                        land.mesh.material.opacity = .5;
-                                        land.isBurnt = true;
-                                    } else {
-                                        land.mesh.material.color.setHex(0x000000);
-                                        land.isBurnt = true;
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
-                                            this.currentLandNeighbourNeighbours[property].isBurnt = true;
-                                        }
-                                    }
-                                }, 5000);
-                            }, 1000)
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }  
                         }
                     }, 2000)
                 }
@@ -792,63 +860,77 @@ class Game {
                         //SI UN CHAMP DANS LES VOISINS
                         console.log(this.arrayCurrentLandNeighbourNeighbours)
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
-                            setTimeout(() => {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    console.log("THELAND", land)
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    const arrayTexturesOfBurntTiles = [];
+                                    for (const property in this.currentLandNeighbourNeighbours) {
+                                        if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                            arrayTexturesOfBurntTiles.push(this.currentLandNeighbourNeighbours[property].mesh.material.map);
+                                            this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        land.mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .3;
+                                            land.isBurnt = true;
+                                            this.jokerUsed = false;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbourNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                        
+                                    }, 5000);
+                                }, 1000)
+                            } else {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
                                     land.mesh.rotation.z = 0;
                                 }, 0.7);
-                                land.type = nextEntities.factory;
-                                land.mesh.material.map = nextEntities.factory.texture;
-                                //INCENDIE SUR TOUTES LES CASES AUTOUR
-                                for (const property in this.currentLandNeighbourNeighbours) {
-                                    if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                        this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
-                                    }
-                                }
-                                setTimeout(() => {
-                                    //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                    if(this.jokerUsed) {
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            //Remettre les bonnes tuiles
-                                            const nextTypeOfTile = getFactoryBurnt();
-                                            if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    land.mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                            } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                            } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                            }
-                                        }
-                                        this.jokerUsed = false;
-                                        land.mesh.material.transparent = true;
-                                        land.mesh.material.opacity = .5;
-                                        land.isBurnt = true;
-                                    } else {
-                                        land.mesh.material.color.setHex(0x000000);
-                                        land.isBurnt = true;
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
-                                            this.currentLandNeighbourNeighbours[property].isBurnt = true;
-                                        }
-                                    }
-                                }, 5000);
-                            }, 1000)
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }  
                         }
                     }, 750)
                 }
@@ -864,64 +946,77 @@ class Game {
                         //CHECK SI IL YA UN VOISIN CHAMP
                         console.log(this.arrayCurrentLandNeighbourNeighbours);
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
-                            setTimeout(() => {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    console.log("THELAND", land)
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    const arrayTexturesOfBurntTiles = [];
+                                    for (const property in this.currentLandNeighbourNeighbours) {
+                                        if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                            arrayTexturesOfBurntTiles.push(this.currentLandNeighbourNeighbours[property].mesh.material.map);
+                                            this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        land.mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .3;
+                                            land.isBurnt = true;
+                                            this.jokerUsed = false;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbourNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                        
+                                    }, 5000);
+                                }, 1000)
+                            } else {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
                                     land.mesh.rotation.z = 0;
                                 }, 0.7);
-                                land.type = nextEntities.factory;
-                                land.mesh.material.map = nextEntities.factory.texture;
-                                //INCENDIE SUR TOUTES LES CASES AUTOUR
-                                for (const property in this.currentLandNeighbourNeighbours) {
-                                    if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-    
-                                        this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
-                                    }
-                                }
-                                setTimeout(() => {
-                                    //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                    if(this.jokerUsed) {
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            //Remettre les bonnes tuiles
-                                            const nextTypeOfTile = getFactoryBurnt();
-                                            if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    land.mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                            } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                            } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                            }
-                                        }
-                                        this.jokerUsed = false;
-                                        land.mesh.material.transparent = true;
-                                        land.mesh.material.opacity = .5;
-                                        land.isBurnt = true;
-                                    } else {
-                                        land.mesh.material.color.setHex(0x000000);
-                                        land.isBurnt = true;
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
-                                            this.currentLandNeighbourNeighbours[property].isBurnt = true;
-                                        }
-                                    }
-                                }, 5000);
-                            }, 1000)
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }  
                         }
                 }, 750);
             } else if(land.type.name === "champs") {
@@ -967,67 +1062,77 @@ class Game {
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         console.log(this.arrayCurrentLandNeighbourNeighbours);
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
-                            setTimeout(() => {
+                            const nextTypeOfTile = getTwoFieldBurnt();
+                            if(nextTypeOfTile === "factory") {
+                                setTimeout(() => {
+                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                    setTimeout(() => {
+                                        land.mesh.rotation.z = 0;
+                                    }, 0.7);
+                                    land.type = nextEntities.factory;
+                                    land.mesh.material.map = nextEntities.factory.texture;
+                                    console.log("THELAND", land)
+                                    //INCENDIE SUR TOUTES LES CASES AUTOUR
+                                    const arrayTexturesOfBurntTiles = [];
+                                    for (const property in this.currentLandNeighbourNeighbours) {
+                                        if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                            arrayTexturesOfBurntTiles.push(this.currentLandNeighbourNeighbours[property].mesh.material.map);
+                                            this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
+                                        }
+                                    }
+                                    setTimeout(() => {
+                                        //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
+                                        if(this.jokerUsed) {
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                //Remettre les bonnes tuiles
+                                                const nextTypeOfTile = getFactoryBurnt();
+                                                if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        land.mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
+                                                    gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
+                                                    setTimeout(() => {
+                                                        this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
+                                                    }, 0.7);
+                                                    this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
+                                                    this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                }
+                                            }
+                                            land.mesh.material.transparent = true;
+                                            land.mesh.material.opacity = .3;
+                                            land.isBurnt = true;
+                                            this.jokerUsed = false;
+                                        } else {
+                                            land.mesh.material.color.setHex(0x000000);
+                                            land.isBurnt = true;
+                                            for (const property in this.currentLandNeighbourNeighbours) {
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
+                                                this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
+                                                this.currentLandNeighbourNeighbours[property].isBurnt = true;
+                                            }
+                                        }
+                                        
+                                    }, 5000);
+                                }, 1000)
+                            } else {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
                                     land.mesh.rotation.z = 0;
                                 }, 0.7);
-                                land.type = nextEntities.factory;
-                                land.mesh.material.map = nextEntities.factory.texture;
-                                console.log("THELAND", land)
-                                //INCENDIE SUR TOUTES LES CASES AUTOUR
-                                const arrayTexturesOfBurntTiles = [];
-                                for (const property in this.currentLandNeighbourNeighbours) {
-                                    if(this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                        arrayTexturesOfBurntTiles.push(this.currentLandNeighbourNeighbours[property].mesh.material.map);
-                                        this.currentLandNeighbourNeighbours[property].mesh.material.map =  this.fireTexture;
-                                    }
-                                }
-                                setTimeout(() => {
-                                    //SI UN JOKER N'EST PAS UTILISE, LES CASES BRULE ET L'USINE DEVIENT NOIRE
-                                    if(this.jokerUsed) {
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            //Remettre les bonnes tuiles
-                                            const nextTypeOfTile = getFactoryBurnt();
-                                            if(nextTypeOfTile === "deadLeaf" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    land.mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
-                                            } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
-                                            } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
-                                                gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                                setTimeout(() => {
-                                                    this.currentLandNeighbourNeighbours[property].mesh.rotation.z = 0;
-                                                }, 0.7);
-                                                this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
-                                                this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
-                                            }
-                                        }
-                                        land.mesh.material.transparent = true;
-                                        land.mesh.material.opacity = .3;
-                                        land.isBurnt = true;
-                                        this.jokerUsed = false;
-                                    } else {
-                                        land.mesh.material.color.setHex(0x000000);
-                                        land.isBurnt = true;
-                                        for (const property in this.currentLandNeighbourNeighbours) {
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.transparent = true;
-                                            this.currentLandNeighbourNeighbours[property].mesh.material.opacity = .5;
-                                            this.currentLandNeighbourNeighbours[property].isBurnt = true;
-                                        }
-                                    }
-                                    
-                                }, 5000);
-                            }, 1000)
+                                land.type = tuileTypesList[4];
+                                land.mesh.material.map = tuileTypesList[4].texture;
+                            }  
                         }
                     }, 750);
                 }

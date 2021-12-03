@@ -3,7 +3,7 @@ import {Vector2} from 'three';
 
 const getAllTextures = () => {
     const textureLoader = new THREE.TextureLoader();
-    const sapinsTexture = textureLoader.load("/sapin.png", (texture) => {
+    const sapinsTexture = textureLoader.load("/tiles/sapin.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -11,7 +11,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[0].texture = texture;
     });
-    const deadLeaf = textureLoader.load("/branche.png", (texture) => {
+    const deadLeaf = textureLoader.load("/tiles/branche.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -19,7 +19,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[1].texture = texture;
     });
-    const sequoiasTexture = textureLoader.load("/sequoia.png", (texture) => {
+    const sequoiasTexture = textureLoader.load("/tiles/sequoia.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -27,7 +27,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[2].texture = texture;
     });
-    const riverTexture = textureLoader.load("/riviere.png", (texture) => {
+    const riverTexture = textureLoader.load("/tiles/eau.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -35,7 +35,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[3].texture = texture;
     });
-    const housesTexture = textureLoader.load("/maison.png", (texture) => {
+    const housesTexture = textureLoader.load("/tiles/maison.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -43,7 +43,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[4].texture = texture;
     });
-    const animalsTexture = textureLoader.load("/animaux.png", (texture) => {
+    const animalsTexture = textureLoader.load("/tiles/animaux.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -51,7 +51,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         tuileTypesList[5].texture = texture;
     });
-    const seedTexture = textureLoader.load("/jeune_pousse.png", (texture) => {
+    const seedTexture = textureLoader.load("/tiles/jeune_pousse.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -59,7 +59,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         nextEntities.seed.texture = texture;
     });
-    const fieldTexture = textureLoader.load("/champs.png", (texture) => {
+    const fieldTexture = textureLoader.load("/tiles/champs.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter
@@ -67,7 +67,7 @@ const getAllTextures = () => {
         texture.repeat.set(1.16, 1.01);
         nextEntities.field.texture = texture;
     });
-    const usineTexture = textureLoader.load("/usine.png", (texture) => {
+    const usineTexture = textureLoader.load("/tiles/usine.png", (texture) => {
         texture.center = new Vector2(0.5, 0.5);
         texture.rotation = 1.5708
         texture.magFilter = THREE.NearestFilter

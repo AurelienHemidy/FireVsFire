@@ -18,6 +18,8 @@ experienceManager.switchSceneTo(3)
  */
 const gui = new dat.GUI()
 
+gui.close();
+
 const parameters = {
     materialColor: '#ffeded',
     needleAngle: 0
@@ -70,20 +72,20 @@ let lands = [];
 let landMeshes = [];
 let selectedLand = null;
 
-const textureTest1 = textureLoader.load("/sapin.png", (texture) => {
+const textureTest1 = textureLoader.load("/tiles/sapin.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708;
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.NearestFilter
 })
-const fireTexture = textureLoader.load("/feu.png", (texture) => {
+const fireTexture = textureLoader.load("/tiles/feu.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708;
     texture.magFilter = THREE.NearestFilter
     texture.minFilter = THREE.NearestFilter
     texture.repeat.set(1.16, 1.01);
 })
-const seedTexture = textureLoader.load("/jeune_pousse.png", (texture) => {
+const seedTexture = textureLoader.load("/tiles/jeune_pousse.png", (texture) => {
     texture.center = new Vector2(0.5, 0.5);
     texture.rotation = 1.5708
     texture.magFilter = THREE.NearestFilter

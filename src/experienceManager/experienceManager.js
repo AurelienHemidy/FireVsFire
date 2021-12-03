@@ -42,7 +42,7 @@ export default class ExperienceManager {
             case 3:
                 this.setCurrentScene(3)//game
                 this.playScene3();
-                countDown("footer-timer-time", 5, 0);
+                countDown("footer-timer-time", 3, 0);
                 break
         }
     }
