@@ -685,6 +685,7 @@ class Game {
                         }, 0.7);
                         land.type = nextEntities.seed;
                         land.mesh.material.map = nextEntities.seed.texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                     }, 750)
                     console.log("JEUNES POUSSES")
                     if(this.isSequoiasNearby === true) {
@@ -697,6 +698,7 @@ class Game {
                             }, 0.7);
                             land.type = tuileTypesList[2];
                             land.mesh.material.map = tuileTypesList[2].texture;
+                            SETTINGS.tuileTypes[land.type.name].sound.play()
                         }, 2000);
                     } else {
                         //S'il n'y a pas de sequioas à côté on calcul la proba avec moins de chance
@@ -711,6 +713,7 @@ class Game {
                                 }, 0.7);
                                 land.type = tuileTypesList[0];
                                 land.mesh.material.map = tuileTypesList[0].texture;
+                                SETTINGS.tuileTypes[land.type.name].sound.play()
                             }, 2000);
                         } else {
                             //SI SEQUIOAS
@@ -721,6 +724,7 @@ class Game {
                                 }, 0.7);
                                 land.type = tuileTypesList[2];
                                 land.mesh.material.map = tuileTypesList[2].texture;
+                                SETTINGS.tuileTypes[land.type.name].sound.play()
                             }, 2000);
                         }
                     }  
@@ -734,6 +738,7 @@ class Game {
                         land.type = tuileTypesList[5];
                         console.log(land.type)
                         land.mesh.material.map = tuileTypesList[5].texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                     }, 2000)
                 } else if(nextTypeOfTile === "champs") {
                     //SI CHAMPS
@@ -745,6 +750,7 @@ class Game {
                         land.type = nextEntities.field;
                         console.log(land.type)
                         land.mesh.material.map = nextEntities.field.texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
                             const nextTypeOfTile = getTwoFieldBurnt();
@@ -756,6 +762,7 @@ class Game {
                                     }, 0.7);
                                     land.type = nextEntities.factory;
                                     land.mesh.material.map = nextEntities.factory.texture;
+                                    SETTINGS.tuileTypes[land.type.name].sound.play()
                                     console.log("THELAND", land)
                                     //INCENDIE SUR TOUTES LES CASES AUTOUR
                                     const arrayTexturesOfBurntTiles = [];
@@ -778,6 +785,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -785,6 +793,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -792,6 +801,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 }
                                             }
                                             land.mesh.material.transparent = true;
@@ -817,6 +827,7 @@ class Game {
                                 }, 0.7);
                                 land.type = tuileTypesList[4];
                                 land.mesh.material.map = tuileTypesList[4].texture;
+                                SETTINGS.tuileTypes[land.type.name].sound.play()
                             }  
                         }
                     }, 2000)
@@ -835,6 +846,7 @@ class Game {
                         }, 0.7);
                         land.type = nextEntities.seed;
                         land.mesh.material.map = nextEntities.seed.texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                     }, 750);
 
                     setTimeout(() => {
@@ -845,6 +857,7 @@ class Game {
                             }, 0.7);
                             land.type = tuileTypesList[0];
                             land.mesh.material.map = tuileTypesList[0].texture;
+                            SETTINGS.tuileTypes[land.type.name].sound.play()
                         } else {
                             gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                             setTimeout(() => {
@@ -852,6 +865,7 @@ class Game {
                             }, 0.7);
                             land.type = tuileTypesList[2];
                             land.mesh.material.map = tuileTypesList[2].texture;
+                            SETTINGS.tuileTypes[land.type.name].sound.play()
                         }
                     }, 2000)
                 } else if(nextTypeOfTile === "animaux") {
@@ -863,6 +877,7 @@ class Game {
                         }, 0.7);
                         land.type = tuileTypesList[5];
                         land.mesh.material.map = tuileTypesList[5].texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                     }, 750)
                 } else if(nextTypeOfTile === "champs") {
                     setTimeout(() => {
@@ -872,6 +887,7 @@ class Game {
                         }, 0.7);
                         land.type = nextEntities.field;
                         land.mesh.material.map = nextEntities.field.texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                         //SI UN CHAMP DANS LES VOISINS
                         console.log(this.arrayCurrentLandNeighbourNeighbours)
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
@@ -884,6 +900,7 @@ class Game {
                                     }, 0.7);
                                     land.type = nextEntities.factory;
                                     land.mesh.material.map = nextEntities.factory.texture;
+                                    SETTINGS.tuileTypes[land.type.name].sound.play()
                                     console.log("THELAND", land)
                                     //INCENDIE SUR TOUTES LES CASES AUTOUR
                                     const arrayTexturesOfBurntTiles = [];
@@ -906,6 +923,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -913,6 +931,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -920,6 +939,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 }
                                             }
                                             land.mesh.material.transparent = true;
@@ -945,6 +965,7 @@ class Game {
                                 }, 0.7);
                                 land.type = tuileTypesList[4];
                                 land.mesh.material.map = tuileTypesList[4].texture;
+                                SETTINGS.tuileTypes[land.type.name].sound.play()
                             }  
                         }
                     }, 750)
@@ -970,6 +991,7 @@ class Game {
                                     }, 0.7);
                                     land.type = nextEntities.factory;
                                     land.mesh.material.map = nextEntities.factory.texture;
+                                    SETTINGS.tuileTypes[land.type.name].sound.play()
                                     console.log("THELAND", land)
                                     //INCENDIE SUR TOUTES LES CASES AUTOUR
                                     const arrayTexturesOfBurntTiles = [];
@@ -992,6 +1014,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -999,6 +1022,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -1006,6 +1030,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 }
                                             }
                                             land.mesh.material.transparent = true;
@@ -1031,6 +1056,7 @@ class Game {
                                 }, 0.7);
                                 land.type = tuileTypesList[4];
                                 land.mesh.material.map = tuileTypesList[4].texture;
+                                SETTINGS.tuileTypes[land.type.name].sound.play()
                             }  
                         }
                 }, 750);
@@ -1048,6 +1074,7 @@ class Game {
                         }, 0.7);
                         land.type = nextEntities.seed;
                         land.mesh.material.map = nextEntities.seed.texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                     }, 750);
                     setTimeout(() => {
                         if(nextTypeOfTile === "sapins") {
@@ -1057,6 +1084,7 @@ class Game {
                             }, 0.7);
                             land.type = tuileTypesList[0];
                             land.mesh.material.map = tuileTypesList[0].texture;
+                            SETTINGS.tuileTypes[land.type.name].sound.play()
                         } else {
                             gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                             setTimeout(() => {
@@ -1064,6 +1092,7 @@ class Game {
                             }, 0.7);
                             land.type = tuileTypesList[2];
                             land.mesh.material.map = tuileTypesList[2].texture;
+                            SETTINGS.tuileTypes[land.type.name].sound.play()
                         }
                     }, 2000);
                 } else if(nextTypeOfTile === "champs") {
@@ -1074,6 +1103,7 @@ class Game {
                         }, 0.7);
                         land.type = nextEntities.field;
                         land.mesh.material.map = nextEntities.field.texture;
+                        SETTINGS.tuileTypes[land.type.name].sound.play()
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         console.log(this.arrayCurrentLandNeighbourNeighbours);
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
@@ -1108,6 +1138,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[1];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[1].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "houses" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -1115,6 +1146,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[4];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[4].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 } else if(nextTypeOfTile === "animals" && this.currentLandNeighbourNeighbours[property].type.name !== 'river') {
                                                     gsap.to(this.currentLandNeighbourNeighbours[property].mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                                     setTimeout(() => {
@@ -1122,6 +1154,7 @@ class Game {
                                                     }, 0.7);
                                                     this.currentLandNeighbourNeighbours[property].type = tuileTypesList[5];
                                                     this.currentLandNeighbourNeighbours[property].mesh.material.map = tuileTypesList[5].texture;
+                                                    SETTINGS.tuileTypes[this.currentLandNeighbourNeighbours[property].type.name].sound.play()
                                                 }
                                             }
                                             land.mesh.material.transparent = true;
@@ -1147,6 +1180,7 @@ class Game {
                                 }, 0.7);
                                 land.type = tuileTypesList[4];
                                 land.mesh.material.map = tuileTypesList[4].texture;
+                                SETTINGS.tuileTypes[land.type.name].sound.play()
                             }  
                         }
                     }, 750);
