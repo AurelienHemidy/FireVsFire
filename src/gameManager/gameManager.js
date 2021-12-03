@@ -232,7 +232,6 @@ class Game {
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLand.includes("champs")) {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -294,15 +293,6 @@ class Game {
                                         }
                                     }, 5000);
                                 }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }
                         }
                     }, 2000)
                 }
@@ -366,7 +356,6 @@ class Game {
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLand.includes("champs")) {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -428,15 +417,6 @@ class Game {
                                         }
                                     }, 5000);
                                 }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }
                         }
                     }, 750)
                 }
@@ -453,7 +433,6 @@ class Game {
                     //CHECK SI IL Y A UN VOISIN CHAMP
                     if(this.arrayCurrentLand.includes("champs")) {
                         const nextTypeOfTile = getTwoFieldBurnt();
-                        if(nextTypeOfTile === "factory") {
                             setTimeout(() => {
                                 gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                 setTimeout(() => {
@@ -515,15 +494,6 @@ class Game {
                                     }
                                 }, 5000);
                             }, 1000)
-                        } else {
-                            gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                            setTimeout(() => {
-                                land.mesh.rotation.z = 0;
-                            }, 0.7);
-                            land.type = tuileTypesList[4];
-                            land.mesh.material.map = tuileTypesList[4].texture;
-                            SETTINGS.tuileTypes[land.type.name].sound.play()
-                        }
                     }
                 }, 750);
             } else if(land.type.name === "champs") {
@@ -573,7 +543,6 @@ class Game {
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLand.includes("champs")) {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -635,15 +604,7 @@ class Game {
                                         }
                                     }, 5000);
                                 }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }
+
                            
                         }
                     }, 750);
@@ -754,7 +715,6 @@ class Game {
                         //CHECK SI IL Y A UN VOISIN CHAMP
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -820,15 +780,6 @@ class Game {
                                         
                                     }, 5000);
                                 }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }  
                         }
                     }, 2000)
                 }
@@ -892,7 +843,6 @@ class Game {
                         console.log(this.arrayCurrentLandNeighbourNeighbours)
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -958,15 +908,6 @@ class Game {
                                         
                                     }, 5000);
                                 }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }  
                         }
                     }, 750)
                 }
@@ -983,7 +924,6 @@ class Game {
                         console.log(this.arrayCurrentLandNeighbourNeighbours);
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -1048,16 +988,7 @@ class Game {
                                         }
                                         
                                     }, 5000);
-                                }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }  
+                                }, 1000);
                         }
                 }, 750);
             } else if(land.type.name === "champs") {
@@ -1108,7 +1039,6 @@ class Game {
                         console.log(this.arrayCurrentLandNeighbourNeighbours);
                         if(this.arrayCurrentLandNeighbourNeighbours.includes("champs") || this.currentLand.type.name === "champs") {
                             const nextTypeOfTile = getTwoFieldBurnt();
-                            if(nextTypeOfTile === "factory") {
                                 setTimeout(() => {
                                     gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
                                     setTimeout(() => {
@@ -1172,16 +1102,7 @@ class Game {
                                         }
                                         
                                     }, 5000);
-                                }, 1000)
-                            } else {
-                                gsap.to(land.mesh.rotation, {duration: .5, z: 6.28319, ease: "cubic-bezier(.24,.63,.12,1)"})
-                                setTimeout(() => {
-                                    land.mesh.rotation.z = 0;
-                                }, 0.7);
-                                land.type = tuileTypesList[4];
-                                land.mesh.material.map = tuileTypesList[4].texture;
-                                SETTINGS.tuileTypes[land.type.name].sound.play()
-                            }  
+                                }, 1000);
                         }
                     }, 750);
                 }
@@ -1223,12 +1144,13 @@ class Game {
         const animalItem = document.querySelector(".animals")
         const factoryItem = document.querySelector(".factory")
 
+        fireItem.style.color = this.deadLeafTotalAtTheEnd < 1 ? "#19816F" : "#F86172";
         sequoiaItem.style.color = this.sequoiasTotalAtTheEnd <= 30 ? "#19816F" : "#F86172";
         houseItem.style.color = this.housesTotalAtTheEnd <= 10 ? "#19816F" : "#F86172";
         animalItem.style.color = this.animalsTotalAtTheEnd <= 30 ? "#19816F" : "#F86172";
         factoryItem.style.color = this.usineTotalAtTheEnd <= 30 ? "#19816F" : "#F86172";
 
-        fireItem.innerHTML = 0;
+        fireItem.innerHTML = this.deadLeafTotalAtTheEnd;
         sequoiaItem.innerHTML = this.sequoiasTotalAtTheEnd;
         houseItem.innerHTML = this.housesTotalAtTheEnd;
         animalItem.innerHTML = this.animalsTotalAtTheEnd;
